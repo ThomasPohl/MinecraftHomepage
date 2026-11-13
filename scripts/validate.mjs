@@ -69,6 +69,15 @@ for (const file of site.commandFiles) {
   }
 }
 
+const sel = read('selectors.json');
+for (const x of sel.selectors) {
+  if (!/^@[a-z]$/.test(x.id) || !x.de || !x.en || !x.editions?.length || typeof x.player !== 'boolean') err('selectors.' + x.id, 'unvollständig');
+}
+for (const e of ['java', 'bedrock']) {
+  for (const f of sel.filters[e] || []) if (!f.ex || !f.de || !f.en) err('selectors.filters.' + e, 'Eintrag unvollständig');
+  if (!sel.selectors.some((x) => x.editions.includes(e) && x.player)) err('selectors', 'kein Spieler-Selektor für ' + e);
+}
+
 if (errors.length) {
   console.error(`${errors.length} Fehler:\n- ` + errors.join('\n- '));
   process.exit(1);

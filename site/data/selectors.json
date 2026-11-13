@@ -1,0 +1,32 @@
+{
+  "_hinweis": "Ziel-Auswahlen für Parameter vom Typ target/player. player: true = wählt nur Spieler aus (auch bei Typ player erlaubt). filters = Beispiele für Filter in eckigen Klammern, je Edition.",
+  "selectors": [
+    { "id": "@s", "player": true, "editions": ["java", "bedrock"], "de": "du selbst (wer den Command ausführt)", "en": "yourself (whoever runs the command)" },
+    { "id": "@p", "player": true, "editions": ["java", "bedrock"], "de": "der nächste Spieler", "en": "the nearest player" },
+    { "id": "@a", "player": true, "editions": ["java", "bedrock"], "de": "alle Spieler", "en": "all players" },
+    { "id": "@r", "player": true, "editions": ["java", "bedrock"], "de": "ein zufälliger Spieler", "en": "a random player" },
+    { "id": "@e", "player": false, "editions": ["java", "bedrock"], "de": "alle Objekte: Spieler, Mobs, Items, Boote …", "en": "all entities: players, mobs, items, boats …" },
+    { "id": "@n", "player": false, "editions": ["java"], "de": "das nächste Objekt, egal ob Spieler oder Mob", "en": "the nearest entity, player or mob" }
+  ],
+  "filters": {
+    "java": [
+      { "ex": "@e[type=zombie]", "de": "nur Zombies", "en": "zombies only" },
+      { "ex": "@e[type=!player]", "de": "alles außer Spielern", "en": "everything except players" },
+      { "ex": "@a[distance=..10]", "de": "alle Spieler im Umkreis von 10 Blöcken", "en": "all players within 10 blocks" },
+      { "ex": "@e[type=cow,limit=1,sort=nearest]", "de": "nur die eine nächste Kuh", "en": "only the single nearest cow" },
+      { "ex": "@a[gamemode=survival]", "de": "alle Spieler im Überlebensmodus", "en": "all players in survival mode" },
+      { "ex": "@a[level=30..]", "de": "alle Spieler ab Level 30", "en": "all players at level 30 or above" },
+      { "ex": "@e[tag=boss]", "de": "alles mit der Markierung boss (siehe /tag)", "en": "everything tagged boss (see /tag)" },
+      { "ex": "@a[team=rot]", "de": "alle Spieler im Team rot (siehe /team)", "en": "all players in team rot (see /team)" }
+    ],
+    "bedrock": [
+      { "ex": "@e[type=zombie]", "de": "nur Zombies", "en": "zombies only" },
+      { "ex": "@e[type=!player]", "de": "alles außer Spielern", "en": "everything except players" },
+      { "ex": "@a[r=10]", "de": "alle Spieler im Umkreis von 10 Blöcken", "en": "all players within 10 blocks" },
+      { "ex": "@e[type=cow,c=1]", "de": "nur die eine nächste Kuh", "en": "only the single nearest cow" },
+      { "ex": "@a[m=survival]", "de": "alle Spieler im Überlebensmodus", "en": "all players in survival mode" },
+      { "ex": "@a[lm=30]", "de": "alle Spieler ab Level 30", "en": "all players at level 30 or above" },
+      { "ex": "@e[tag=boss]", "de": "alles mit der Markierung boss (siehe /tag)", "en": "everything tagged boss (see /tag)" }
+    ]
+  }
+}

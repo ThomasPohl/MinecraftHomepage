@@ -20,7 +20,7 @@ function savePrefs() {
 }
 
 const view = { q: '', cat: 'all', perm: 'all', favOnly: false, sort: { key: 'name', dir: 1 } };
-let data = { commands: [], lists: {}, site: {} };
+let data = { commands: [], lists: {}, site: {}, selectors: { selectors: [], filters: {} } };
 const app = document.getElementById('app');
 const t = (key) => T[prefs.lang][key];
 
@@ -366,7 +366,7 @@ function fieldHtml(tk, i) {
     case 'rot': body = multi(['yaw', 'pitch'], '0'); break;
     case 'target':
     case 'player':
-      body = text(t('ph')[tk.type], tk.req ? (tk.def || '@s') : '', `list="dl-selector"`); break;
+      body = targetHtml(tk, i, id, emptyOpt); break;
     case 'text': body = text(t('ph').text, tk.def || ''); break;
     default: {
       const l = listFor(tk.type, builder.edition);
@@ -379,17 +379,44 @@ function fieldHtml(tk, i) {
   return `<div class="field${wide}">${head}${body}</div>`;
 }
 
+// Ziel-Auswahl: Dropdown mit erklärten Selektoren plus freies Feld für Namen oder Filter
+function selectorsFor(type) {
+  return data.selectors.selectors.filter((s) => s.editions.includes(builder.edition) && (type === 'target' || s.player));
+}
+function targetHtml(tk, i, id, emptyOpt) {
+  const def = tk.req ? (tk.def || '@s') : '';
+  const sels = selectorsFor(tk.type);
+  const known = sels.some((s) => s.id === def);
+  return `<select id="${id}" data-i="${i}" data-sel>${emptyOpt}
+      ${sels.map((s) => `<option value="${esc(s.id)}" ${s.id === def ? 'selected' : ''}>${esc(s.id + ' – ' + s[prefs.lang])}</option>`).join('')}
+      <option value="__custom" ${def && !known ? 'selected' : ''}>${esc(t('customTarget'))}</option></select>
+    <input type="text" data-custom="${i}" aria-label="${esc(tk.name + ': ' + t('customTarget'))}" placeholder="${esc(t('ph')[tk.type])}" value="${def && !known ? esc(def) : ''}" autocomplete="off" autocapitalize="off" spellcheck="false" style="margin-top:6px" hidden>`;
+}
+function targetHelpHtml(types) {
+  const all = types.has('target');
+  const sels = selectorsFor(all ? 'target' : 'player');
+  const filters = (data.selectors.filters[builder.edition] || []).filter((f) => all || /^@[apsr]/.test(f.ex));
+  const row = (code, text) => `<li><code>${esc(code)}</code> ${esc(text)}</li>`;
+  return `<details class="help" open><summary>${esc(t('targetHelp'))}</summary>
+    <ul>${sels.map((s) => row(s.id, s[prefs.lang])).join('')}${row(t('playerNameEx'), t('playerNameDesc'))}</ul>
+    ${all ? '' : `<p class="hint">${esc(t('playersOnly'))}</p>`}
+    <p><strong>${esc(t('filterTitle'))}</strong> ${esc(t('filterIntro'))}</p>
+    <ul>${filters.map((f) => row(f.ex, f[prefs.lang])).join('')}</ul></details>`;
+}
+
 function renderFields() {
   const box = document.getElementById('b-fields');
   builder.tokens = parseForm(builder.forms[builder.index]);
   const params = builder.tokens.map((tk, i) => [tk, i]).filter(([tk]) => tk.kind === 'param');
-  const lists = new Set(['selector']);
+  const lists = new Set();
   params.forEach(([tk]) => { if (listFor(tk.type, builder.edition)) lists.add(tk.type); });
   const datalists = [...lists].map((name) => {
     const l = listFor(name, builder.edition);
     return l ? `<datalist id="dl-${esc(name)}">${l.values.map((v) => `<option value="${esc(v)}"></option>`).join('')}</datalist>` : '';
   }).join('');
-  box.innerHTML = (params.length ? params.map(([tk, i]) => fieldHtml(tk, i)).join('') : `<p class="muted">${esc(t('noParams'))}</p>`) + datalists;
+  const targetTypes = new Set(params.map(([tk]) => tk.type).filter((ty) => ty === 'target' || ty === 'player'));
+  box.innerHTML = (params.length ? params.map(([tk, i]) => fieldHtml(tk, i)).join('') : `<p class="muted">${esc(t('noParams'))}</p>`)
+    + (targetTypes.size ? targetHelpHtml(targetTypes) : '') + datalists;
   updateOutput();
 }
 
@@ -398,7 +425,13 @@ function updateOutput() {
   const values = builder.tokens.map(() => '');
   const parts = {};
   box.querySelectorAll('[data-i]').forEach((el) => {
-    const i = Number(el.dataset.i), v = el.value.trim();
+    const i = Number(el.dataset.i);
+    let v = el.value.trim();
+    if (el.dataset.sel !== undefined) {
+      const custom = box.querySelector(`[data-custom="${i}"]`);
+      custom.hidden = v !== '__custom';
+      if (v === '__custom') v = custom.value.trim();
+    }
     if (el.dataset.part === undefined) values[i] = v;
     else (parts[i] = parts[i] || [])[Number(el.dataset.part)] = v;
   });
@@ -438,9 +471,9 @@ async function load(path) {
 }
 (async function start() {
   try {
-    const [site, lists] = await Promise.all([load('data/site.json'), load('data/lists.json')]);
+    const [site, lists, selectors] = await Promise.all([load('data/site.json'), load('data/lists.json'), load('data/selectors.json')]);
     const files = await Promise.all(site.commandFiles.map((f) => load(`data/commands/${f}.json`)));
-    data = { site, lists, commands: files.flat() };
+    data = { site, lists, selectors, commands: files.flat() };
     prefs.favs = prefs.favs.filter((id) => data.commands.some((c) => c.id === id));
     applyChrome();
     route();
