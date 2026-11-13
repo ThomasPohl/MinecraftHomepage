@@ -1,0 +1,35 @@
+[
+  {
+    "id": "give", "cat": "items",
+    "java": { "perm": 2, "since": "1.3.1", "forms": ["<targets:player> <item:item> [count:int]"], "ex": "/give @s diamond 64" },
+    "bedrock": { "perm": "gd", "since": "0.16.0", "forms": ["<player:player> <itemName:item> [amount:int] [data:int]"], "ex": "/give @s diamond 64" },
+    "de": { "short": "Gibt einem Spieler Items.", "details": "Die Anzahl ist optional, ohne Angabe gibt es ein Stück. In Java lassen sich Eigenschaften in eckigen Klammern anhängen, zum Beispiel diamond_sword[enchantments={sharpness:5}]." },
+    "en": { "short": "Gives items to a player.", "details": "The count is optional; without it you get one. In Java you can append properties in square brackets, e.g. diamond_sword[enchantments={sharpness:5}]." }
+  },
+  {
+    "id": "clear", "cat": "items",
+    "java": { "perm": 2, "since": "1.4.2", "forms": ["[targets:player] [item:item] [maxCount:int]"], "ex": "/clear @s dirt" },
+    "bedrock": { "perm": "gd", "forms": ["[player:player] [itemName:item] [data:int] [maxCount:int]"], "ex": "/clear @s dirt" },
+    "de": { "short": "Entfernt Items aus dem Inventar.", "details": "Ohne Angaben wird dein ganzes Inventar geleert. Mit Item und Höchstzahl kannst du gezielt nur einen Teil entfernen." },
+    "en": { "short": "Removes items from the inventory.", "details": "Without arguments your whole inventory is emptied. With an item and a maximum count you can remove just a part." }
+  },
+  {
+    "id": "item", "cat": "items",
+    "java": { "perm": 2, "since": "1.17", "forms": ["replace entity <targets:target> <slot:slot> with <item:item> [count:int]", "replace block <pos:pos> <slot:slot> with <item:item> [count:int]", "replace entity <targets:target> <slot:slot> from entity <source:target> <sourceSlot:slot>", "modify entity <targets:target> <slot:slot> <modifier:text>"], "ex": "/item replace entity @s armor.head with carved_pumpkin" },
+    "de": { "short": "Legt Items gezielt in einen Slot oder verändert sie.", "details": "Damit setzt du zum Beispiel einen Helm direkt auf oder füllst einen bestimmten Platz in einer Kiste. Seit 26.3 gibt es zusätzlich fill und override für mehrere Slots auf einmal." },
+    "en": { "short": "Puts items into a specific slot or modifies them.", "details": "Use it to equip a helmet directly or fill a certain slot in a chest. Since 26.3 there are also fill and override for several slots at once." }
+  },
+  {
+    "id": "replaceitem", "cat": "items",
+    "bedrock": { "perm": "gd", "forms": ["entity <target:target> <slotType:slot> <slotId:int> <itemName:item> [amount:int]", "block <position:pos> slot.container <slotId:int> <itemName:item> [amount:int]"], "ex": "/replaceitem entity @s slot.armor.head 0 carved_pumpkin" },
+    "de": { "short": "Legt ein Item gezielt in einen Slot.", "details": "Das Bedrock-Gegenstück zu /item replace in Java. Die Slot-Nummer zählt ab 0." },
+    "en": { "short": "Puts an item into a specific slot.", "details": "The Bedrock counterpart of Java's /item replace. Slot numbers start at 0." }
+  },
+  {
+    "id": "loot", "cat": "items",
+    "java": { "perm": 2, "since": "1.14", "forms": ["give <players:player> loot <loot_table:text>", "spawn <targetPos:pos> loot <loot_table:text>", "give <players:player> kill <target:target>", "spawn <targetPos:pos> kill <target:target>", "spawn <targetPos:pos> mine <pos:pos> [tool:item]"], "ex": "/loot give @s loot minecraft:chests/simple_dungeon" },
+    "bedrock": { "perm": "gd", "since": "1.18.0", "forms": ["give <players:player> loot <loot_table:text>", "spawn <position:pos> loot <loot_table:text>", "spawn <position:pos> kill <entity:target>"], "ex": "/loot give @s loot \"chests/simple_dungeon\"" },
+    "de": { "short": "Erzeugt Beute aus einer Beutetabelle.", "details": "Du bekommst zum Beispiel den zufälligen Inhalt einer Verlieskiste oder das, was ein Mob fallen lassen würde." },
+    "en": { "short": "Generates loot from a loot table.", "details": "You get things like the random contents of a dungeon chest or whatever a mob would drop." }
+  }
+]

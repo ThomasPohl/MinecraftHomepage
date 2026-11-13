@@ -1,0 +1,12 @@
+{
+  "_hinweis": "Angaben für Impressum und Datenschutz. Leere Felder werden auf der Seite gelb als 'bitte ergänzen' markiert.",
+  "owner": "Niklas Pohl",
+  "careOf": "",
+  "street": "",
+  "city": "",
+  "country": "Deutschland",
+  "email": "",
+  "hoster": "Netbeat (netbeat.de)",
+  "dataVersion": { "java": "26.3", "bedrock": "26.60", "checked": "2026-11-13" },
+  "commandFiles": ["world", "player", "items", "chat", "effects", "logic", "server"]
+}

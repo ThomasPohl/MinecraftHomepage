@@ -1,0 +1,170 @@
+[
+  {
+    "id": "op", "cat": "server",
+    "java": { "perm": 3, "forms": ["<targets:player>"], "ex": "/op Niklas" },
+    "bedrock": { "perm": "admin", "cheats": false, "since": "0.16.0", "forms": ["<player:player>"], "ex": "/op Niklas" },
+    "de": { "short": "Macht einen Spieler zum Operator.", "details": "Operatoren dürfen Cheat-Commands benutzen. Gib dieses Recht nur Leuten, denen du vertraust." },
+    "en": { "short": "Makes a player an operator.", "details": "Operators may use cheat commands. Only give this right to people you trust." }
+  },
+  {
+    "id": "deop", "cat": "server",
+    "java": { "perm": 3, "forms": ["<targets:player>"], "ex": "/deop Niklas" },
+    "bedrock": { "perm": "admin", "cheats": false, "since": "0.16.0", "forms": ["<player:player>"], "ex": "/deop Niklas" },
+    "de": { "short": "Nimmt einem Spieler die Operator-Rechte.", "details": "Der Spieler kann danach keine Cheat-Commands mehr benutzen." },
+    "en": { "short": "Removes a player's operator rights.", "details": "The player can no longer use cheat commands afterwards." }
+  },
+  {
+    "id": "kick", "cat": "server",
+    "java": { "perm": 3, "forms": ["<targets:player> [reason:text]"], "ex": "/kick Niklas Bitte fair bleiben" },
+    "bedrock": { "perm": "gd", "cheats": false, "forms": ["<name:player> [reason:text]"], "ex": "/kick Niklas Bitte fair bleiben" },
+    "de": { "short": "Wirft einen Spieler vom Server.", "details": "Der Spieler kann danach wieder beitreten. Für eine dauerhafte Sperre gibt es in Java /ban." },
+    "en": { "short": "Kicks a player from the server.", "details": "The player can join again afterwards. For a permanent block, Java has /ban." }
+  },
+  {
+    "id": "ban", "cat": "server",
+    "java": { "perm": 3, "forms": ["<targets:player> [reason:text]"], "ex": "/ban Stoerenfried Griefing" },
+    "de": { "short": "Sperrt einen Spieler dauerhaft vom Server.", "details": "Nur auf Mehrspieler-Servern. Mit /pardon hebst du die Sperre wieder auf." },
+    "en": { "short": "Bans a player from the server permanently.", "details": "Multiplayer servers only. /pardon lifts the ban again." }
+  },
+  {
+    "id": "ban-ip", "cat": "server",
+    "java": { "perm": 3, "forms": ["<target:text> [reason:text]"], "ex": "/ban-ip 203.0.113.7" },
+    "de": { "short": "Sperrt eine IP-Adresse vom Server.", "details": "Trifft alle, die von dieser Adresse aus spielen. Statt der Adresse geht auch der Name eines Spielers, der gerade online ist." },
+    "en": { "short": "Bans an IP address from the server.", "details": "Affects everyone playing from that address. Instead of the address you can give the name of a player who is online." }
+  },
+  {
+    "id": "banlist", "cat": "server",
+    "java": { "perm": 3, "forms": ["[type:ips|players]"], "ex": "/banlist players" },
+    "de": { "short": "Zeigt die Liste der Sperren.", "details": "Wahlweise gesperrte Spieler oder gesperrte IP-Adressen." },
+    "en": { "short": "Shows the ban list.", "details": "Either banned players or banned IP addresses." }
+  },
+  {
+    "id": "pardon", "cat": "server",
+    "java": { "perm": 3, "forms": ["<targets:text>"], "ex": "/pardon Stoerenfried" },
+    "de": { "short": "Hebt die Sperre eines Spielers auf.", "details": "Der Spieler darf danach wieder auf den Server." },
+    "en": { "short": "Lifts a player's ban.", "details": "The player may join the server again afterwards." }
+  },
+  {
+    "id": "pardon-ip", "cat": "server",
+    "java": { "perm": 3, "forms": ["<target:text>"], "ex": "/pardon-ip 203.0.113.7" },
+    "de": { "short": "Hebt die Sperre einer IP-Adresse auf.", "details": "Das Gegenstück zu /ban-ip." },
+    "en": { "short": "Lifts the ban of an IP address.", "details": "The counterpart of /ban-ip." }
+  },
+  {
+    "id": "whitelist", "cat": "server",
+    "java": { "perm": 3, "forms": ["(on|off|list|reload)", "(add|remove) <targets:player>"], "ex": "/whitelist add Niklas" },
+    "bedrock": { "name": "allowlist", "alias": ["whitelist"], "perm": "owner", "forms": ["(on|off|list|reload)", "(add|remove) <name:text>"], "ex": "/allowlist add Niklas" },
+    "de": { "short": "Verwaltet die Liste erlaubter Spieler.", "details": "Ist die Liste eingeschaltet, kommen nur eingetragene Spieler auf den Server. In Bedrock heißt der Command /allowlist." },
+    "en": { "short": "Manages the list of allowed players.", "details": "When the list is on, only listed players can join the server. In Bedrock the command is called /allowlist." }
+  },
+  {
+    "id": "save-all", "cat": "server",
+    "java": { "perm": 4, "forms": ["", "flush"], "ex": "/save-all" },
+    "de": { "short": "Speichert die Welt sofort.", "details": "Mit flush wird wirklich alles direkt auf die Festplatte geschrieben; das kann den Server kurz anhalten." },
+    "en": { "short": "Saves the world immediately.", "details": "With flush everything is written to disk right away, which may pause the server briefly." }
+  },
+  {
+    "id": "save-off", "cat": "server",
+    "java": { "perm": 4, "forms": [""], "ex": "/save-off" },
+    "de": { "short": "Schaltet das automatische Speichern aus.", "details": "Sinnvoll, während ein Backup der Weltdateien läuft. Danach unbedingt /save-on nicht vergessen." },
+    "en": { "short": "Turns automatic saving off.", "details": "Useful while a backup of the world files runs. Do not forget /save-on afterwards." }
+  },
+  {
+    "id": "save-on", "cat": "server",
+    "java": { "perm": 4, "forms": [""], "ex": "/save-on" },
+    "de": { "short": "Schaltet das automatische Speichern wieder ein.", "details": "Das Gegenstück zu /save-off." },
+    "en": { "short": "Turns automatic saving back on.", "details": "The counterpart of /save-off." }
+  },
+  {
+    "id": "save", "cat": "server",
+    "bedrock": { "perm": "owner", "forms": ["(hold|query|resume)"], "ex": "/save hold" },
+    "de": { "short": "Steuert das Speichern auf einem Bedrock-Server.", "details": "hold hält das Speichern für ein Backup an, query zeigt, ob die Dateien bereit sind, resume setzt es fort." },
+    "en": { "short": "Controls saving on a Bedrock server.", "details": "hold pauses saving for a backup, query shows whether the files are ready, resume continues." }
+  },
+  {
+    "id": "stop", "cat": "server",
+    "java": { "perm": 4, "forms": [""], "ex": "/stop" },
+    "bedrock": { "perm": "owner", "forms": [""], "ex": "/stop" },
+    "de": { "short": "Fährt den Server herunter.", "details": "Die Welt wird vorher gespeichert und alle Spieler werden getrennt." },
+    "en": { "short": "Shuts the server down.", "details": "The world is saved first and all players are disconnected." }
+  },
+  {
+    "id": "setidletimeout", "cat": "server",
+    "java": { "perm": 3, "forms": ["<minutes:int>"], "ex": "/setidletimeout 15" },
+    "de": { "short": "Wirft untätige Spieler nach einer Zeit vom Server.", "details": "Die Zeit wird in Minuten angegeben; 0 schaltet die Funktion aus." },
+    "en": { "short": "Kicks idle players after a while.", "details": "The time is given in minutes; 0 turns the feature off." }
+  },
+  {
+    "id": "publish", "cat": "server",
+    "java": { "perm": 4, "since": "1.3.1", "forms": [""], "ex": "/publish" },
+    "de": { "short": "Öffnet die Einzelspieler-Welt im lokalen Netzwerk.", "details": "Danach können andere im selben WLAN beitreten. Die optionalen Angaben haben sich in 26.2 und 26.3 geändert; die aktuelle Schreibweise zeigt die Tab-Taste im Spiel." },
+    "en": { "short": "Opens the singleplayer world to the local network.", "details": "Others on the same Wi-Fi can then join. The optional arguments changed in 26.2 and 26.3; in-game tab completion shows the current syntax." }
+  },
+  {
+    "id": "unpublish", "cat": "server",
+    "java": { "perm": 4, "since": "26.2", "forms": [""], "ex": "/unpublish" },
+    "de": { "short": "Schließt eine fürs Netzwerk geöffnete Welt wieder.", "details": "Das Gegenstück zu /publish." },
+    "en": { "short": "Closes a world that was opened to the network.", "details": "The counterpart of /publish." }
+  },
+  {
+    "id": "setmaxplayers", "cat": "server",
+    "bedrock": { "perm": "host", "since": "1.1.0", "forms": ["<maxPlayers:int>"], "ex": "/setmaxplayers 8" },
+    "de": { "short": "Legt fest, wie viele Spieler beitreten dürfen.", "details": "Gilt für die laufende Sitzung des Gastgebers." },
+    "en": { "short": "Sets how many players may join.", "details": "Applies to the host's current session." }
+  },
+  {
+    "id": "transfer", "cat": "server",
+    "java": { "perm": 3, "since": "1.20.5", "forms": ["<hostname:text> [port:int] [players:player]"], "ex": "/transfer play.example.org 25565 @a" },
+    "bedrock": { "perm": "owner", "forms": ["<player:player> <host:text> [port:int]"], "ex": "/transfer @a play.example.org 19132" },
+    "de": { "short": "Schickt Spieler auf einen anderen Server.", "details": "Der andere Server muss solche Weiterleitungen annehmen." },
+    "en": { "short": "Sends players to another server.", "details": "The other server has to accept such transfers." }
+  },
+  {
+    "id": "changesetting", "cat": "server",
+    "bedrock": { "perm": "owner", "forms": ["allow-cheats <value:bool>", "difficulty <value:difficulty>"], "ex": "/changesetting allow-cheats true" },
+    "de": { "short": "Ändert Einstellungen eines laufenden Bedrock-Servers.", "details": "Zum Beispiel Cheats erlauben oder den Schwierigkeitsgrad, ohne den Server neu zu starten." },
+    "en": { "short": "Changes settings of a running Bedrock server.", "details": "For example allowing cheats or the difficulty without restarting the server." }
+  },
+  {
+    "id": "permission", "cat": "server",
+    "bedrock": { "perm": "owner", "forms": ["(list|reload)"], "ex": "/permission reload" },
+    "de": { "short": "Lädt die Rechte auf einem Bedrock-Server neu.", "details": "Nur auf eigenständigen Servern: liest die Rechte-Datei erneut ein und wendet sie an." },
+    "en": { "short": "Reloads permissions on a Bedrock server.", "details": "Dedicated servers only: re-reads the permissions file and applies it." }
+  },
+  {
+    "id": "reloadconfig", "cat": "server",
+    "bedrock": { "perm": "owner", "forms": [""], "ex": "/reloadconfig" },
+    "de": { "short": "Lädt Konfigurationsdateien des Servers neu.", "details": "Betrifft Dateien für Variablen, Geheimnisse und Rechte von Skripten." },
+    "en": { "short": "Reloads the server's configuration files.", "details": "Covers the files for script variables, secrets and permissions." }
+  },
+  {
+    "id": "reloadpacketlimitconfig", "cat": "server",
+    "bedrock": { "perm": "owner", "forms": [""], "ex": "/reloadpacketlimitconfig" },
+    "de": { "short": "Lädt die Paketlimit-Einstellungen neu.", "details": "Ein reiner Server-Command für Betreiber, die Netzwerk-Limits anpassen." },
+    "en": { "short": "Reloads the packet limit settings.", "details": "A pure server command for operators who tune network limits." }
+  },
+  {
+    "id": "sendshowstoreoffer", "cat": "server",
+    "bedrock": { "perm": "owner", "forms": ["<player:player> <offerId:text>"], "ex": "/sendshowstoreoffer @p <offerId>" },
+    "de": { "short": "Öffnet bei einem Spieler eine Marktplatz-Seite.", "details": "Nur auf eigenständigen Servern mit Administrator-Rechten verfügbar." },
+    "en": { "short": "Opens a Marketplace page for a player.", "details": "Only available on dedicated servers with administrator rights." }
+  },
+  {
+    "id": "wsserver", "cat": "server",
+    "bedrock": { "alias": ["connect"], "perm": "admin", "since": "0.16.0", "forms": ["<serverUri:text>"], "ex": "/connect localhost:3000" },
+    "de": { "short": "Verbindet das Spiel mit einem WebSocket-Server.", "details": "Darüber können externe Programme Commands schicken, zum Beispiel Programmier-Lernwerkzeuge." },
+    "en": { "short": "Connects the game to a WebSocket server.", "details": "External programs can send commands this way, for example coding education tools." }
+  },
+  {
+    "id": "packstack", "cat": "server",
+    "bedrock": { "perm": "any", "cheats": false, "forms": [""], "ex": "/packstack" },
+    "de": { "short": "Zeigt die geladenen Pakete im Chat an.", "details": "Listet auf, welche Ressourcen- und Verhaltenspakete gerade aktiv sind und in welcher Reihenfolge." },
+    "en": { "short": "Prints the loaded packs to chat.", "details": "Lists which resource and behaviour packs are active and in which order." }
+  },
+  {
+    "id": "project", "cat": "server",
+    "bedrock": { "perm": "gd", "cheats": false, "forms": [""], "ex": "/project" },
+    "de": { "short": "Werkzeuge für Projekte im Bedrock-Editor.", "details": "Nur im Editor-Modus verfügbar, nicht im normalen Spiel. Die Unterbefehle zeigt die Autovervollständigung im Editor." },
+    "en": { "short": "Tools for projects in the Bedrock Editor.", "details": "Only available in Editor mode, not in the normal game. Auto-completion in the Editor shows the subcommands." }
+  }
+]
