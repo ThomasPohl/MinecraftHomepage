@@ -55,7 +55,7 @@ for (const file of site.commandFiles) {
             if (tk.kind !== 'param') { if (optionalSeen) err(id, `${e}: fester Text nach optionalem Parameter in "${form}"`); continue; }
             if (!tk.req) optionalSeen = true;
             else if (optionalSeen) err(id, `${e}: Pflichtparameter nach optionalem in "${form}"`);
-            if (tk.type !== 'enum' && !BASIC_TYPES.includes(tk.type)) {
+            if (tk.type !== 'enum' && !BASIC_TYPES.includes(tk.type) && !['item', 'block'].includes(tk.type)) {
               const l = lists[tk.type];
               if (!l) err(id, `${e}: Liste "${tk.type}" fehlt in lists.json`);
               else if (!Array.isArray(l) && !l.values && !l[e]) err(id, `${e}: Liste "${tk.type}" hat keine Werte für ${e}`);
@@ -67,6 +67,16 @@ for (const file of site.commandFiles) {
       }
     }
   }
+}
+
+const catalog = read('catalog.json');
+const seen = { i: new Set(), b: new Set() };
+for (const en of catalog.entries) {
+  const [cid, de, enName, cat, kind = 'i'] = en;
+  if (!/^[a-z0-9_]+$/.test(cid || '') || !de || !enName) err('catalog.' + cid, 'unvollständig');
+  if (!catalog.categories[cat]) err('catalog.' + cid, `unbekannte Kategorie "${cat}"`);
+  if (!['i', 'b', 'ib'].includes(kind)) err('catalog.' + cid, 'Art muss i, b oder ib sein');
+  for (const k of kind) { if (seen[k]?.has(cid)) err('catalog.' + cid, 'doppelt'); seen[k]?.add(cid); }
 }
 
 const sel = read('selectors.json');
