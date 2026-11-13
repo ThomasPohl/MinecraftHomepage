@@ -20,7 +20,7 @@ function savePrefs() {
 }
 
 const view = { q: '', cat: 'all', perm: 'all', favOnly: false, sort: { key: 'name', dir: 1 } };
-let data = { commands: [], lists: {}, site: {}, selectors: { selectors: [], filters: {} } };
+let data = { commands: [], lists: {}, site: {}, selectors: { selectors: [], filters: {} }, catalog: { categories: {}, entries: [] } };
 const app = document.getElementById('app');
 const t = (key) => T[prefs.lang][key];
 
@@ -368,6 +368,9 @@ function fieldHtml(tk, i) {
     case 'player':
       body = targetHtml(tk, i, id, emptyOpt); break;
     case 'text': body = text(t('ph').text, tk.def || ''); break;
+    case 'item':
+    case 'block':
+      body = pickerHtml(tk, i, id); break;
     default: {
       const l = listFor(tk.type, builder.edition);
       if (!l) body = text(t('ph').text, tk.def || '');
@@ -375,8 +378,44 @@ function fieldHtml(tk, i) {
       else body = text(l.values[0] || '', tk.def || '', `list="dl-${esc(tk.type)}"`);
     }
   }
-  const wide = tk.type === 'text' && /command|message|json|nbt|text/i.test(tk.name) ? ' wide' : '';
+  const wide = tk.type === 'item' || tk.type === 'block' ? ' wide2' : tk.type === 'text' && /command|message|json|nbt|text/i.test(tk.name) ? ' wide' : '';
   return `<div class="field${wide}">${head}${body}</div>`;
+}
+
+// Item-/Block-Auswahl: Kategorie + Suche + Dropdown mit deutschen/englischen Namen
+function catalogEntries(kind) {
+  const want = kind === 'block' ? 'b' : 'i';
+  return data.catalog.entries
+    .filter((en) => (en[4] || 'i').includes(want))
+    .map(([id, de, en, cat]) => ({ id, cat, label: prefs.lang === 'de' ? de : en, hay: (id + ' ' + de + ' ' + en).toLowerCase() }))
+    .sort((a, b) => a.label.localeCompare(b.label, prefs.lang));
+}
+function pickerOptions(tk, kind, cat, q, current) {
+  const words = q.trim().toLowerCase().split(/\s+/).filter(Boolean);
+  const list = catalogEntries(kind).filter((en) => (cat === 'all' || en.cat === cat) && words.every((w) => en.hay.includes(w)));
+  const first = tk.req ? `<option value="">${esc(t('pickOne')(list.length))}</option>` : `<option value="">${esc(t('none'))}</option>`;
+  return first + list.map((en) => `<option value="${esc(en.id)}" ${en.id === current ? 'selected' : ''}>${esc(en.label + ' – ' + en.id)}</option>`).join('')
+    + `<option value="__custom" ${current === '__custom' ? 'selected' : ''}>${esc(t('customId'))}</option>`;
+}
+function pickerHtml(tk, i, id) {
+  const kind = tk.type;
+  const cats = [...new Set(catalogEntries(kind).map((en) => en.cat))];
+  const catOpts = Object.keys(data.catalog.categories).filter((c) => cats.includes(c));
+  return `<div class="picker" data-picker="${i}" data-kind="${kind}">
+    <div class="multi">
+      <select data-pcat aria-label="${esc(tk.name + ': ' + t('category'))}"><option value="all">${esc(t('allCats'))}</option>
+        ${catOpts.map((c) => `<option value="${c}">${esc(data.catalog.categories[c][prefs.lang])}</option>`).join('')}</select>
+      <input type="search" data-psearch aria-label="${esc(tk.name + ': ' + t('search'))}" placeholder="${esc(t('pickSearch'))}" autocomplete="off">
+    </div>
+    <select id="${id}" data-i="${i}" data-sel style="margin-top:6px">${pickerOptions(tk, kind, 'all', '', tk.def || '')}</select>
+    <input type="text" data-custom="${i}" aria-label="${esc(tk.name + ': ' + t('customId'))}" placeholder="${esc(t('customIdPh'))}" autocomplete="off" autocapitalize="off" spellcheck="false" style="margin-top:6px" hidden>
+    <p class="hint">${esc(t(kind === 'item' ? 'itemHint' : 'blockHint'))}</p></div>`;
+}
+function refreshPicker(el) {
+  const box = el.closest('[data-picker]');
+  const i = Number(box.dataset.picker), sel = box.querySelector('[data-sel]');
+  sel.innerHTML = pickerOptions(builder.tokens[i], box.dataset.kind, box.querySelector('[data-pcat]').value, box.querySelector('[data-psearch]').value, sel.value);
+  if (sel.value === '' && sel.options.length === 3) sel.selectedIndex = 1;   // genau ein Treffer: gleich auswählen
 }
 
 // Ziel-Auswahl: Dropdown mit erklärten Selektoren plus freies Feld für Namen oder Filter
@@ -420,8 +459,11 @@ function renderFields() {
   updateOutput();
 }
 
-function updateOutput() {
+function updateOutput(ev) {
   const box = document.getElementById('b-fields');
+  const src = ev && ev.target;
+  if (src && src.nodeType === 1 && !box.contains(src)) return;   // Ereignis eines alten, schon ersetzten Feldes
+  if (src && src.dataset && (src.dataset.pcat !== undefined || src.dataset.psearch !== undefined)) refreshPicker(src);
   const values = builder.tokens.map(() => '');
   const parts = {};
   box.querySelectorAll('[data-i]').forEach((el) => {
@@ -471,9 +513,9 @@ async function load(path) {
 }
 (async function start() {
   try {
-    const [site, lists, selectors] = await Promise.all([load('data/site.json'), load('data/lists.json'), load('data/selectors.json')]);
+    const [site, lists, selectors, catalog] = await Promise.all([load('data/site.json'), load('data/lists.json'), load('data/selectors.json'), load('data/catalog.json')]);
     const files = await Promise.all(site.commandFiles.map((f) => load(`data/commands/${f}.json`)));
-    data = { site, lists, selectors, commands: files.flat() };
+    data = { site, lists, selectors, catalog, commands: files.flat() };
     prefs.favs = prefs.favs.filter((id) => data.commands.some((c) => c.id === id));
     applyChrome();
     route();

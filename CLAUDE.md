@@ -53,8 +53,8 @@ Syntax-Anzeige und Builder entstehen:
 | `<name:typ=wert>` | mit Vorgabewert |
 
 Typen: `int`, `float`, `bool`, `text`, `pos` (x y z), `pos2` (x z), `rot` (yaw pitch), `target`,
-`player`, eine Inline-Auswahl `a|b|c` oder der Name einer Liste aus `site/data/lists.json`
-(`item`, `block`, `entity`, `effect`, `enchantment`, `biome`, `structure`, `gamerule` …).
+`player`, `item`, `block` (aus dem Katalog), eine Inline-Auswahl `a|b|c` oder der Name einer Liste aus `site/data/lists.json`
+(`entity`, `effect`, `enchantment`, `biome`, `structure`, `gamerule` …).
 Formen dürfen keine Leerzeichen innerhalb eines Tokens enthalten. Bei sehr komplexen Commands
 (z. B. `/execute`) nur die häufigsten Formen aufnehmen und das in `details` erwähnen.
 
@@ -64,6 +64,14 @@ Array (gilt für beide Editionen), `{ "java": [...], "bedrock": [...] }` oder zu
 `"free": true`. Listen ohne `free` mit höchstens 15 Einträgen werden als Dropdown gezeigt, alle
 anderen als durchsuchbares Feld, in das man auch eigene Werte tippen kann. IDs unterscheiden
 sich teils zwischen Java und Bedrock (z. B. `villager` / `villager_v2`).
+
+## Item- und Block-Katalog (`site/data/catalog.json`)
+
+Parameter vom Typ `item` und `block` zeigen eine Auswahl mit Kategorie-Filter, Suche und
+deutschen/englischen Namen sowie ein freies Feld für eigene IDs. Eintrag:
+`[id, deutscher Name, englischer Name, Kategorie, Art]`; Art `i` = nur Item (Standard), `b` = nur
+Block, `ib` = beides. Deutsche Namen wie im Spiel schreiben. Der Katalog ist eine Auswahl
+häufiger Items, keine vollständige Liste.
 
 ## Ziel-Auswahlen (`site/data/selectors.json`)
 
