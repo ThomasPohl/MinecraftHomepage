@@ -1,0 +1,87 @@
+[
+  {
+    "id": "say", "cat": "chat",
+    "java": { "perm": 2, "forms": ["<message:text>"], "ex": "/say Hallo zusammen!" },
+    "bedrock": { "perm": "gd", "cheats": false, "since": "0.16.0", "forms": ["<message:text>"], "ex": "/say Hallo zusammen!" },
+    "de": { "short": "Schreibt eine Nachricht an alle in den Chat.", "details": "Die Nachricht erscheint mit deinem Namen in eckigen Klammern. Auswahlen wie @a werden durch die passenden Namen ersetzt." },
+    "en": { "short": "Sends a message to everyone in chat.", "details": "The message appears with your name in square brackets. Selectors like @a are replaced by the matching names." }
+  },
+  {
+    "id": "me", "cat": "chat",
+    "java": { "perm": 0, "forms": ["<action:text>"], "ex": "/me winkt" },
+    "bedrock": { "perm": "any", "cheats": false, "forms": ["<message:text>"], "ex": "/me winkt" },
+    "de": { "short": "Zeigt eine Aktion von dir im Chat.", "details": "Aus /me winkt wird im Chat die Zeile: * DeinName winkt." },
+    "en": { "short": "Shows an action of yours in chat.", "details": "/me waves becomes the chat line: * YourName waves." }
+  },
+  {
+    "id": "msg", "cat": "chat",
+    "java": { "alias": ["tell", "w"], "perm": 0, "forms": ["<targets:player> <message:text>"], "ex": "/msg Niklas Hi!" },
+    "bedrock": { "name": "tell", "alias": ["msg", "w"], "perm": "any", "cheats": false, "since": "0.16.0", "forms": ["<target:player> <message:text>"], "ex": "/tell Niklas Hi!" },
+    "de": { "short": "Schickt eine private Nachricht.", "details": "Nur der angegebene Spieler kann die Nachricht lesen. /msg, /tell und /w machen dasselbe." },
+    "en": { "short": "Sends a private message.", "details": "Only the chosen player can read it. /msg, /tell and /w all do the same." }
+  },
+  {
+    "id": "teammsg", "cat": "chat",
+    "java": { "alias": ["tm"], "perm": 0, "since": "1.14", "forms": ["<message:text>"], "ex": "/tm Treffpunkt am Turm" },
+    "de": { "short": "Schreibt nur an das eigene Team.", "details": "Funktioniert nur, wenn du in einem Team bist, das mit /team angelegt wurde." },
+    "en": { "short": "Writes to your own team only.", "details": "Only works if you are in a team created with /team." }
+  },
+  {
+    "id": "tellraw", "cat": "chat",
+    "java": { "perm": 2, "since": "1.7.2", "forms": ["<targets:player> <message:text>"], "ex": "/tellraw @a {\"text\":\"Willkommen!\",\"color\":\"green\"}" },
+    "bedrock": { "perm": "gd", "cheats": false, "since": "1.9.0", "forms": ["<target:player> <rawJson:text>"], "ex": "/tellraw @a {\"rawtext\":[{\"text\":\"Willkommen!\"}]}" },
+    "de": { "short": "Sendet eine gestaltete Chat-Nachricht.", "details": "Die Nachricht wird als JSON geschrieben und kann Farben und in Java auch klickbare Texte enthalten. Bedrock verlangt die Form mit rawtext." },
+    "en": { "short": "Sends a formatted chat message.", "details": "The message is written as JSON and can have colours and, in Java, clickable text. Bedrock requires the rawtext form." }
+  },
+  {
+    "id": "title", "cat": "chat",
+    "java": { "perm": 2, "since": "1.8", "forms": ["<targets:player> (title|subtitle|actionbar) <text:text>", "<targets:player> (clear|reset)", "<targets:player> times <fadeIn:int> <stay:int> <fadeOut:int>"], "ex": "/title @a title \"Los geht's!\"" },
+    "bedrock": { "perm": "gd", "forms": ["<player:player> (title|subtitle|actionbar) <text:text>", "<player:player> (clear|reset)", "<player:player> times <fadeIn:int> <stay:int> <fadeOut:int>"], "ex": "/title @a title Los geht's!" },
+    "de": { "short": "Zeigt großen Text mitten auf dem Bildschirm.", "details": "title ist die große Zeile, subtitle die kleine darunter, actionbar der Text über der Schnellleiste. Mit times stellst du Ein- und Ausblendzeiten in Ticks ein." },
+    "en": { "short": "Shows large text in the middle of the screen.", "details": "title is the big line, subtitle the small one below, actionbar the text above the hotbar. times sets fade-in and fade-out in ticks." }
+  },
+  {
+    "id": "titleraw", "cat": "chat",
+    "bedrock": { "perm": "gd", "forms": ["<player:player> (title|subtitle|actionbar) <rawJson:text>", "<player:player> (clear|reset)"], "ex": "/titleraw @a title {\"rawtext\":[{\"text\":\"Los!\"}]}" },
+    "de": { "short": "Zeigt einen Titel aus JSON-Text.", "details": "Wie /title, aber der Text wird als rawtext-JSON angegeben. So lassen sich zum Beispiel Punktestände einbauen." },
+    "en": { "short": "Shows a title from JSON text.", "details": "Like /title, but the text is given as rawtext JSON, which lets you include scores, for example." }
+  },
+  {
+    "id": "bossbar", "cat": "chat",
+    "java": { "perm": 2, "since": "1.13", "forms": ["add <id:text> <name:text>", "set <id:text> players [targets:player]", "set <id:text> value <value:int>", "set <id:text> max <max:int>", "set <id:text> color <color:bossbar_color>", "set <id:text> style <style:bossbar_style>", "set <id:text> visible <visible:bool>", "set <id:text> name <name:text>", "get <id:text> (max|players|value|visible)", "remove <id:text>", "list"], "ex": "/bossbar add timer \"Zeit\"" },
+    "de": { "short": "Erstellt eigene Bossleisten am oberen Bildschirmrand.", "details": "Zuerst mit add anlegen, dann mit set players festlegen, wer sie sieht. Die Leiste eignet sich gut als Timer oder Fortschrittsanzeige." },
+    "en": { "short": "Creates custom boss bars at the top of the screen.", "details": "Create one with add first, then use set players to choose who sees it. The bar works well as a timer or progress display." }
+  },
+  {
+    "id": "dialog", "cat": "chat",
+    "java": { "perm": 2, "since": "1.21.6", "forms": ["show <targets:player> <dialog:text>", "clear <targets:player>"], "ex": "/dialog show @s minecraft:server_links" },
+    "de": { "short": "Zeigt Spielern ein Dialogfenster.", "details": "Dialoge sind eigene Fenster mit Text und Knöpfen, die in Datenpaketen festgelegt werden." },
+    "en": { "short": "Shows a dialog window to players.", "details": "Dialogs are custom windows with text and buttons that are defined in data packs." }
+  },
+  {
+    "id": "dialogue", "cat": "chat",
+    "bedrock": { "perm": "gd", "since": "1.17.10", "forms": ["open <npc:target> <player:player> [sceneName:text]", "change <npc:target> <sceneName:text> [players:player]"], "ex": "/dialogue open @e[type=npc,c=1] @p" },
+    "de": { "short": "Öffnet das Gespräch mit einem NPC.", "details": "Die Gesprächsszenen kommen aus einem Verhaltenspaket. Mit change stellst du ein, welche Szene der NPC als Nächstes zeigt." },
+    "en": { "short": "Opens the conversation with an NPC.", "details": "The scenes come from a behaviour pack. change sets which scene the NPC shows next." }
+  },
+  {
+    "id": "help", "cat": "chat",
+    "java": { "perm": 0, "forms": ["[command:text]"], "ex": "/help give" },
+    "bedrock": { "alias": ["?"], "perm": "any", "cheats": false, "since": "0.16.0", "forms": ["[page:int]", "<command:text>"], "ex": "/help give" },
+    "de": { "short": "Zeigt Hilfe zu Commands an.", "details": "Ohne Angabe bekommst du eine Liste der Commands, die du benutzen darfst. Mit einem Command-Namen siehst du dessen Schreibweise." },
+    "en": { "short": "Shows help for commands.", "details": "Without arguments you get a list of the commands you may use. With a command name you see its syntax." }
+  },
+  {
+    "id": "list", "cat": "chat",
+    "java": { "perm": 0, "forms": ["", "uuids"], "ex": "/list" },
+    "bedrock": { "perm": "any", "cheats": false, "since": "0.16.0", "forms": [""], "ex": "/list" },
+    "de": { "short": "Zeigt, wer gerade online ist.", "details": "Listet alle Spieler in der Welt oder auf dem Server auf." },
+    "en": { "short": "Shows who is online right now.", "details": "Lists all players in the world or on the server." }
+  },
+  {
+    "id": "waypoint", "cat": "chat",
+    "java": { "perm": 2, "since": "1.21.6", "forms": ["list", "modify <waypoint:target> color <color:color>", "modify <waypoint:target> color reset", "modify <waypoint:target> style set <style:text>", "modify <waypoint:target> style reset"], "ex": "/waypoint modify @s color red" },
+    "de": { "short": "Verändert Wegpunkte auf der Ortungsleiste.", "details": "Die Ortungsleiste zeigt, in welcher Richtung andere Spieler sind. Hier stellst du Farbe und Aussehen der Punkte ein." },
+    "en": { "short": "Changes waypoints on the locator bar.", "details": "The locator bar shows the direction of other players. Here you set the colour and look of the markers." }
+  }
+]

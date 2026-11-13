@@ -1,0 +1,59 @@
+[
+  {
+    "id": "particle", "cat": "effects",
+    "java": { "perm": 2, "since": "1.8", "forms": ["<name:particle> [pos:pos]", "<name:particle> <pos:pos> <delta:pos> <speed:float> <count:int> [mode:force|normal] [viewers:player]"], "ex": "/particle heart ~ ~2 ~" },
+    "bedrock": { "perm": "gd", "since": "1.8.0", "forms": ["<effect:particle> [position:pos]"], "ex": "/particle minecraft:heart_particle ~ ~2 ~" },
+    "de": { "short": "Erzeugt Partikel.", "details": "Herzen, Rauch, Flammen und vieles mehr. In Java kannst du zusätzlich Streuung, Tempo und Anzahl bestimmen." },
+    "en": { "short": "Creates particles.", "details": "Hearts, smoke, flames and much more. In Java you can also set spread, speed and count." }
+  },
+  {
+    "id": "playsound", "cat": "effects",
+    "java": { "perm": 2, "since": "1.6.1", "forms": ["<sound:sound> [source:sound_source] [targets:player] [pos:pos] [volume:float] [pitch:float]"], "ex": "/playsound entity.player.levelup master @s" },
+    "bedrock": { "perm": "gd", "forms": ["<sound:sound> [player:player] [position:pos] [volume:float] [pitch:float]"], "ex": "/playsound random.levelup @s" },
+    "de": { "short": "Spielt einen Ton ab.", "details": "Lautstärke 1 ist normal; höhere Werte machen den Ton weiter hörbar. Die Tonhöhe geht von 0.5 (tief) bis 2 (hoch). Java und Bedrock benutzen unterschiedliche Ton-Namen." },
+    "en": { "short": "Plays a sound.", "details": "Volume 1 is normal; higher values make it audible from further away. Pitch ranges from 0.5 (low) to 2 (high). Java and Bedrock use different sound names." }
+  },
+  {
+    "id": "stopsound", "cat": "effects",
+    "java": { "perm": 2, "since": "1.9.3", "forms": ["<targets:player> [source:sound_source] [sound:sound]"], "ex": "/stopsound @a" },
+    "bedrock": { "perm": "gd", "forms": ["<player:player> [sound:sound]"], "ex": "/stopsound @a" },
+    "de": { "short": "Stoppt laufende Töne.", "details": "Ohne weitere Angaben werden alle Töne für die gewählten Spieler beendet." },
+    "en": { "short": "Stops playing sounds.", "details": "Without further arguments all sounds stop for the selected players." }
+  },
+  {
+    "id": "music", "cat": "effects",
+    "bedrock": { "perm": "gd", "since": "1.16.100", "forms": ["play <trackName:text> [volume:float] [fadeSeconds:float] [repeatMode:play_once|loop]", "queue <trackName:text> [volume:float] [fadeSeconds:float] [repeatMode:play_once|loop]", "stop [fadeSeconds:float]", "volume <volume:float>"], "ex": "/music play record.cat" },
+    "de": { "short": "Steuert die Hintergrundmusik.", "details": "Spielt ein Musikstück ab, stellt es in die Warteschlange oder stoppt die Musik mit sanftem Ausblenden." },
+    "en": { "short": "Controls background music.", "details": "Plays a track, queues it or stops the music with a gentle fade-out." }
+  },
+  {
+    "id": "camera", "cat": "effects",
+    "bedrock": { "perm": "gd", "since": "1.20.30", "forms": ["<players:player> set <preset:camera_preset>", "<players:player> set <preset:camera_preset> pos <position:pos>", "<players:player> clear", "<players:player> fade time <fadeIn:float> <hold:float> <fadeOut:float>"], "ex": "/camera @s set minecraft:free pos ~ ~10 ~" },
+    "de": { "short": "Steuert die Kamera eines Spielers.", "details": "Damit baust du Kamerafahrten und feste Perspektiven für Zwischensequenzen. clear stellt die normale Sicht wieder her." },
+    "en": { "short": "Controls a player's camera.", "details": "Use it for camera moves and fixed views in cutscenes. clear restores the normal view." }
+  },
+  {
+    "id": "camerashake", "cat": "effects",
+    "bedrock": { "perm": "gd", "since": "1.16.100", "forms": ["add <player:player> [intensity:float] [seconds:float] [shakeType:positional|rotational]", "stop [player:player]"], "ex": "/camerashake add @a 1 2" },
+    "de": { "short": "Lässt den Bildschirm wackeln.", "details": "Stärke geht von 0 bis 4. Gut für Explosionen oder Erdbeben in eigenen Karten." },
+    "en": { "short": "Makes the screen shake.", "details": "Intensity ranges from 0 to 4. Great for explosions or earthquakes in custom maps." }
+  },
+  {
+    "id": "fog", "cat": "effects",
+    "bedrock": { "perm": "gd", "since": "1.16.100", "forms": ["<victim:player> push <fogId:text> <userProvidedId:text>", "<victim:player> (pop|remove) <userProvidedId:text>"], "ex": "/fog @a push minecraft:fog_hell nebel" },
+    "de": { "short": "Legt Nebel über die Sicht eines Spielers.", "details": "push fügt eine Nebel-Einstellung hinzu, pop entfernt die zuletzt hinzugefügte mit diesem Namen, remove alle." },
+    "en": { "short": "Adds fog to a player's view.", "details": "push adds a fog setting, pop removes the latest one with that name, remove all of them." }
+  },
+  {
+    "id": "hud", "cat": "effects",
+    "bedrock": { "perm": "gd", "since": "1.20.60", "forms": ["<target:player> (hide|reset) [hud_element:hud_element]"], "ex": "/hud @a hide hotbar" },
+    "de": { "short": "Blendet Teile der Bildschirmanzeige aus.", "details": "Zum Beispiel Schnellleiste, Herzen oder Fadenkreuz. reset zeigt sie wieder an." },
+    "en": { "short": "Hides parts of the on-screen display.", "details": "For example the hotbar, hearts or crosshair. reset shows them again." }
+  },
+  {
+    "id": "posteffect", "cat": "effects",
+    "java": { "perm": 2, "since": "26.3", "forms": ["add <targets:player> <effect:text>", "remove <targets:player> <effect:text>", "clear <targets:player>", "list <targets:player>"], "ex": "/posteffect list @s" },
+    "de": { "short": "Legt Bildeffekte über die Sicht eines Spielers.", "details": "Neu in Java 26.3. Bildeffekte sind Shader, die das ganze Bild verändern. Die genaue Schreibweise bitte im Spiel mit der Tab-Taste prüfen." },
+    "en": { "short": "Applies screen effects to a player's view.", "details": "New in Java 26.3. Post effects are shaders that change the whole picture. Please check the exact syntax in-game with tab completion." }
+  }
+]

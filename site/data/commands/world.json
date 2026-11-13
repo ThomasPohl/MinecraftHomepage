@@ -1,0 +1,132 @@
+[
+  {
+    "id": "time", "cat": "world",
+    "java": { "perm": 2, "since": "1.3.1", "forms": ["set <time:time_preset>", "add <amount:int>", "query (daytime|gametime|day)"], "ex": "/time set day" },
+    "bedrock": { "perm": "gd", "since": "0.16.0", "forms": ["set <time:time_preset>", "add <amount:int>", "query (daytime|gametime|day)"], "ex": "/time set day" },
+    "de": { "short": "Stellt die Tageszeit ein oder fragt sie ab.", "details": "Ein Minecraft-Tag hat 24000 Ticks: 1000 ist Morgen, 6000 Mittag, 13000 Nacht, 18000 Mitternacht. Mit add spulst du vor." },
+    "en": { "short": "Sets or queries the time of day.", "details": "A Minecraft day has 24000 ticks: 1000 is morning, 6000 noon, 13000 night, 18000 midnight. Use add to fast-forward." }
+  },
+  {
+    "id": "weather", "cat": "world",
+    "java": { "perm": 2, "since": "1.4.2", "forms": ["(clear|rain|thunder) [duration:int]"], "ex": "/weather clear" },
+    "bedrock": { "perm": "gd", "since": "0.16.0", "forms": ["(clear|rain|thunder) [duration:int]"], "ex": "/weather clear" },
+    "de": { "short": "Ändert das Wetter.", "details": "clear = Sonne, rain = Regen oder Schnee, thunder = Gewitter. Die Dauer ist optional; ohne Angabe wählt das Spiel eine zufällige Dauer." },
+    "en": { "short": "Changes the weather.", "details": "clear = sunshine, rain = rain or snow, thunder = thunderstorm. The duration is optional; without it the game picks a random length." }
+  },
+  {
+    "id": "toggledownfall", "cat": "world",
+    "bedrock": { "perm": "gd", "since": "0.16.0", "forms": [""], "ex": "/toggledownfall" },
+    "de": { "short": "Schaltet Regen an oder aus.", "details": "Regnet es gerade, hört es auf, und umgekehrt. In Java gibt es diesen Command nicht mehr, dort nimmst du /weather." },
+    "en": { "short": "Toggles rain on or off.", "details": "If it is raining it stops, and the other way round. Java no longer has this command; use /weather there." }
+  },
+  {
+    "id": "daylock", "cat": "world",
+    "bedrock": { "alias": ["alwaysday"], "perm": "gd", "forms": ["[lock:bool]"], "ex": "/daylock true" },
+    "de": { "short": "Hält die Zeit auf Tag fest.", "details": "Mit true bleibt es dauerhaft hell, mit false läuft der Tag-Nacht-Wechsel wieder normal." },
+    "en": { "short": "Locks the time to daytime.", "details": "true keeps it bright forever, false lets the day-night cycle run again." }
+  },
+  {
+    "id": "difficulty", "cat": "world",
+    "java": { "perm": 2, "since": "1.4.2", "forms": ["[difficulty:difficulty]"], "ex": "/difficulty hard" },
+    "bedrock": { "perm": "gd", "forms": ["<difficulty:difficulty>"], "ex": "/difficulty hard" },
+    "de": { "short": "Stellt den Schwierigkeitsgrad ein.", "details": "Bei peaceful verschwinden feindliche Monster und der Hunger sinkt nicht. In Java zeigt der Command ohne Angabe den aktuellen Grad an." },
+    "en": { "short": "Sets the difficulty level.", "details": "On peaceful, hostile monsters vanish and hunger does not drain. In Java, running it without a value shows the current level." }
+  },
+  {
+    "id": "gamerule", "cat": "world",
+    "java": { "perm": 2, "since": "1.4.2", "forms": ["<rule:gamerule> [value:gamerule_value]"], "ex": "/gamerule keep_inventory true" },
+    "bedrock": { "perm": "gd", "cheats": false, "forms": ["<rule:gamerule> [value:gamerule_value]"], "ex": "/gamerule keepinventory true" },
+    "de": { "short": "Ändert Spielregeln der Welt oder zeigt sie an.", "details": "Beispiel: Inventar nach dem Tod behalten. Achtung: Seit Java 1.21.11 heißen die Regeln anders (keep_inventory statt keepInventory). Bedrock schreibt alles klein und ohne Unterstrich." },
+    "en": { "short": "Changes or shows the game rules of the world.", "details": "Example: keep your inventory after dying. Note: since Java 1.21.11 the rules have new names (keep_inventory instead of keepInventory). Bedrock uses lowercase without underscores." }
+  },
+  {
+    "id": "setblock", "cat": "world",
+    "java": { "perm": 2, "since": "1.7.2", "forms": ["<pos:pos> <block:block> [mode:destroy|keep|replace]"], "ex": "/setblock ~ ~-1 ~ diamond_block" },
+    "bedrock": { "perm": "gd", "since": "0.16.0", "forms": ["<position:pos> <block:block> [mode:destroy|keep|replace]"], "ex": "/setblock ~ ~-1 ~ diamond_block" },
+    "de": { "short": "Setzt einen einzelnen Block an eine Position.", "details": "destroy lässt den alten Block als Item fallen, keep setzt nur, wenn dort Luft ist, replace ersetzt einfach." },
+    "en": { "short": "Places a single block at a position.", "details": "destroy drops the old block as an item, keep only places into air, replace simply swaps the block." }
+  },
+  {
+    "id": "fill", "cat": "world",
+    "java": { "perm": 2, "since": "1.8", "forms": ["<from:pos> <to:pos> <block:block> [mode:destroy|hollow|keep|outline|replace]"], "ex": "/fill ~ ~ ~ ~5 ~5 ~5 glass hollow" },
+    "bedrock": { "perm": "gd", "since": "0.16.0", "forms": ["<from:pos> <to:pos> <block:block> [mode:destroy|hollow|keep|outline|replace]"], "ex": "/fill ~ ~ ~ ~5 ~5 ~5 glass hollow" },
+    "de": { "short": "Füllt einen Bereich mit einem Block.", "details": "Der Bereich wird durch zwei Ecken bestimmt. hollow baut einen hohlen Kasten, outline nur die Außenwände. Es gibt eine Obergrenze für die Anzahl der Blöcke pro Command." },
+    "en": { "short": "Fills a region with a block.", "details": "The region is defined by two corners. hollow builds an empty box, outline only the outer walls. There is an upper limit of blocks per command." }
+  },
+  {
+    "id": "clone", "cat": "world",
+    "java": { "perm": 2, "since": "1.8", "forms": ["<begin:pos> <end:pos> <destination:pos> [maskMode:replace|masked] [cloneMode:normal|force|move]"], "ex": "/clone 0 64 0 10 70 10 20 64 0" },
+    "bedrock": { "perm": "gd", "since": "0.16.0", "forms": ["<begin:pos> <end:pos> <destination:pos> [maskMode:replace|masked] [cloneMode:normal|force|move]"], "ex": "/clone 0 64 0 10 70 10 20 64 0" },
+    "de": { "short": "Kopiert einen Bereich an eine andere Stelle.", "details": "masked kopiert keine Luftblöcke mit, move verschiebt den Bereich, statt ihn zu kopieren." },
+    "en": { "short": "Copies a region to another place.", "details": "masked skips air blocks, move relocates the region instead of copying it." }
+  },
+  {
+    "id": "fillbiome", "cat": "world",
+    "java": { "perm": 2, "since": "1.19.3", "forms": ["<from:pos> <to:pos> <biome:biome>"], "ex": "/fillbiome ~-10 ~-10 ~-10 ~10 ~10 ~10 cherry_grove" },
+    "de": { "short": "Ändert das Biom in einem Bereich.", "details": "Die Blöcke bleiben gleich, aber Grasfarbe, Wetter und Mob-Spawns richten sich danach nach dem neuen Biom." },
+    "en": { "short": "Changes the biome inside a region.", "details": "Blocks stay the same, but grass colour, weather and mob spawns follow the new biome afterwards." }
+  },
+  {
+    "id": "locate", "cat": "world",
+    "java": { "perm": 2, "since": "1.11", "forms": ["structure <structure:structure>", "biome <biome:biome>", "poi <poi:text>"], "ex": "/locate structure village_plains" },
+    "bedrock": { "perm": "gd", "forms": ["structure <structure:structure>", "biome <biome:biome>"], "ex": "/locate structure village" },
+    "de": { "short": "Sucht das nächste Bauwerk oder Biom.", "details": "Zeigt die Koordinaten im Chat an. In Java kannst du auf die Koordinaten klicken, um den Teleport-Command vorzubereiten." },
+    "en": { "short": "Finds the nearest structure or biome.", "details": "Prints the coordinates in chat. In Java you can click them to prepare a teleport command." }
+  },
+  {
+    "id": "place", "cat": "world",
+    "java": { "perm": 2, "since": "1.19", "forms": ["feature <feature:text> [pos:pos]", "structure <structure:structure> [pos:pos]", "template <template:text> [pos:pos]", "jigsaw <pool:text> <target:text> <max_depth:int> [pos:pos]"], "ex": "/place feature cherry" },
+    "bedrock": { "perm": "admin", "forms": ["structure <structure:structure> [pos:pos]", "feature <feature:text> [pos:pos]", "jigsaw <pool:text> <target:text> <maxDepth:int> [pos:pos]"], "ex": "/place structure minecraft:trial_chambers" },
+    "de": { "short": "Erzeugt ein Bauwerk oder ein Geländedetail.", "details": "Damit lassen sich zum Beispiel Bäume (feature) oder ganze Dörfer (structure) direkt an eine Stelle setzen." },
+    "en": { "short": "Generates a structure or a terrain feature.", "details": "Lets you drop things like trees (feature) or whole villages (structure) right at a position." }
+  },
+  {
+    "id": "setworldspawn", "cat": "world",
+    "java": { "perm": 2, "since": "1.7.2", "forms": ["[pos:pos]"], "ex": "/setworldspawn ~ ~ ~" },
+    "bedrock": { "perm": "gd", "since": "0.16.0", "forms": ["[spawnPoint:pos]"], "ex": "/setworldspawn ~ ~ ~" },
+    "de": { "short": "Legt den Welt-Spawnpunkt fest.", "details": "Hier starten neue Spieler und alle, die kein Bett oder keinen eigenen Spawnpunkt haben. Ohne Angabe gilt deine aktuelle Position." },
+    "en": { "short": "Sets the world spawn point.", "details": "New players and everyone without a bed or personal spawn start here. Without a position your current spot is used." }
+  },
+  {
+    "id": "worldborder", "cat": "world",
+    "java": { "perm": 2, "since": "1.8", "forms": ["set <distance:float> [time:int]", "add <distance:float> [time:int]", "center <pos:pos2>", "damage (amount|buffer) <value:float>", "warning (distance|time) <value:int>", "get"], "ex": "/worldborder set 500" },
+    "de": { "short": "Steuert die Weltgrenze.", "details": "Die Weltgrenze ist eine quadratische Wand, hinter der Spieler Schaden nehmen. Mit einer Zeitangabe wächst oder schrumpft sie langsam." },
+    "en": { "short": "Controls the world border.", "details": "The world border is a square wall beyond which players take damage. With a time value it grows or shrinks slowly." }
+  },
+  {
+    "id": "seed", "cat": "world",
+    "java": { "perm": 2, "since": "1.3.1", "forms": [""], "ex": "/seed" },
+    "de": { "short": "Zeigt den Seed der Welt an.", "details": "Mit dem Seed kann man dieselbe Welt noch einmal erzeugen. Im Einzelspieler geht das auch ohne Cheats." },
+    "en": { "short": "Shows the world seed.", "details": "With the seed you can generate the same world again. In singleplayer it works without cheats as well." }
+  },
+  {
+    "id": "forceload", "cat": "world",
+    "java": { "perm": 2, "since": "1.13.1", "forms": ["add <from:pos2> [to:pos2]", "remove <from:pos2> [to:pos2]", "remove all", "query [pos:pos2]"], "ex": "/forceload add ~ ~" },
+    "de": { "short": "Hält Chunks dauerhaft geladen.", "details": "Praktisch für Farmen und Redstone, die weiterlaufen sollen, wenn niemand in der Nähe ist. Zu viele geladene Chunks machen das Spiel langsamer." },
+    "en": { "short": "Keeps chunks loaded permanently.", "details": "Handy for farms and redstone that should keep running while nobody is nearby. Too many loaded chunks slow the game down." }
+  },
+  {
+    "id": "tickingarea", "cat": "world",
+    "bedrock": { "perm": "gd", "since": "1.2.0", "forms": ["add <from:pos> <to:pos> [name:text]", "add circle <center:pos> <radius:int> [name:text]", "remove <name:text>", "remove_all", "list"], "ex": "/tickingarea add circle ~ ~ ~ 2 farm" },
+    "de": { "short": "Hält Bereiche dauerhaft aktiv.", "details": "Das Bedrock-Gegenstück zu /forceload: In einem Ticking-Bereich laufen Farmen und Redstone weiter, auch wenn kein Spieler dort ist." },
+    "en": { "short": "Keeps areas active permanently.", "details": "The Bedrock counterpart of /forceload: inside a ticking area, farms and redstone keep running even without a player nearby." }
+  },
+  {
+    "id": "structure", "cat": "world",
+    "bedrock": { "perm": "gd", "since": "1.16.100", "forms": ["save <name:text> <from:pos> <to:pos>", "load <name:text> <to:pos> [rotation:0_degrees|90_degrees|180_degrees|270_degrees] [mirror:none|x|z|xz]", "delete <name:text>"], "ex": "/structure save haus ~ ~ ~ ~10 ~10 ~10" },
+    "de": { "short": "Speichert und lädt Bauwerke.", "details": "Du kannst einen Bereich unter einem Namen sichern und später an anderer Stelle wieder einfügen, auf Wunsch gedreht oder gespiegelt." },
+    "en": { "short": "Saves and loads structures.", "details": "You can store a region under a name and paste it somewhere else later, rotated or mirrored if you like." }
+  },
+  {
+    "id": "tick", "cat": "world",
+    "java": { "perm": 3, "since": "1.20.3", "forms": ["query", "rate <rate:float>", "freeze", "unfreeze", "step [time:int]", "step stop", "sprint [time:int]", "sprint stop"], "ex": "/tick rate 40" },
+    "de": { "short": "Steuert die Geschwindigkeit des Spiels.", "details": "Normal sind 20 Ticks pro Sekunde. Mit rate läuft die Welt schneller oder in Zeitlupe, freeze hält sie an, step geht einzelne Ticks weiter." },
+    "en": { "short": "Controls the speed of the game.", "details": "The default is 20 ticks per second. rate speeds the world up or slows it down, freeze pauses it, step advances single ticks." }
+  },
+  {
+    "id": "mobevent", "cat": "world",
+    "bedrock": { "perm": "gd", "forms": ["<event:mobevent> [value:bool]"], "ex": "/mobevent minecraft:wandering_trader_event false" },
+    "de": { "short": "Schaltet Mob-Ereignisse an oder aus.", "details": "Damit lassen sich zum Beispiel Plünderer-Patrouillen oder der fahrende Händler abschalten." },
+    "en": { "short": "Turns mob events on or off.", "details": "Lets you disable things like pillager patrols or the wandering trader." }
+  }
+]

@@ -1,0 +1,165 @@
+[
+  {
+    "id": "gamemode", "cat": "player",
+    "java": { "perm": 2, "since": "1.3.1", "forms": ["<gamemode:gamemode> [target:player]"], "ex": "/gamemode creative" },
+    "bedrock": { "perm": "gd", "since": "0.16.0", "forms": ["<gamemode:gamemode> [player:player]"], "ex": "/gamemode creative" },
+    "de": { "short": "Wechselt den Spielmodus.", "details": "Ohne Spielerangabe gilt der Command für dich selbst. Bedrock versteht auch Kurzformen wie c, s und a, Java nur die ausgeschriebenen Namen." },
+    "en": { "short": "Switches the game mode.", "details": "Without a player it applies to yourself. Bedrock also accepts short forms like c, s and a; Java only the full names." }
+  },
+  {
+    "id": "defaultgamemode", "cat": "player",
+    "java": { "perm": 2, "since": "1.3.1", "forms": ["<gamemode:gamemode>"], "ex": "/defaultgamemode survival" },
+    "de": { "short": "Legt den Spielmodus für neue Spieler fest.", "details": "Wer die Welt zum ersten Mal betritt, startet in diesem Modus." },
+    "en": { "short": "Sets the game mode for new players.", "details": "Anyone joining the world for the first time starts in this mode." }
+  },
+  {
+    "id": "teleport", "cat": "player",
+    "java": { "alias": ["tp"], "perm": 2, "since": "1.3.1", "forms": ["<location:pos>", "<destination:target>", "<targets:target> <location:pos> [rotation:rot]", "<targets:target> <destination:target>"], "ex": "/tp @s 0 100 0" },
+    "bedrock": { "alias": ["tp"], "perm": "gd", "since": "0.16.0", "forms": ["<destination:pos>", "<destination:target>", "<victim:target> <destination:pos> [rotation:rot]", "<victim:target> <destination:target>"], "ex": "/tp @s 0 100 0" },
+    "de": { "short": "Teleportiert Spieler oder andere Objekte.", "details": "Ziel ist entweder eine Position oder ein anderer Spieler. Mit ~ gibst du Positionen relativ zu dir an, zum Beispiel ~ ~10 ~ für zehn Blöcke nach oben." },
+    "en": { "short": "Teleports players or other entities.", "details": "The destination is either a position or another player. Use ~ for positions relative to you, e.g. ~ ~10 ~ for ten blocks up." }
+  },
+  {
+    "id": "spawnpoint", "cat": "player",
+    "java": { "perm": 2, "since": "1.4.2", "forms": ["[targets:player] [pos:pos]"], "ex": "/spawnpoint @s ~ ~ ~" },
+    "bedrock": { "perm": "gd", "since": "0.16.0", "forms": ["[player:player] [spawnPos:pos]"], "ex": "/spawnpoint @s ~ ~ ~" },
+    "de": { "short": "Setzt den persönlichen Spawnpunkt eines Spielers.", "details": "Nach dem Tod taucht der Spieler an dieser Stelle wieder auf, so wie bei einem Bett." },
+    "en": { "short": "Sets a player's personal spawn point.", "details": "After dying the player respawns at this spot, just like with a bed." }
+  },
+  {
+    "id": "clearspawnpoint", "cat": "player",
+    "bedrock": { "perm": "gd", "since": "1.16.100", "forms": ["[player:player]"], "ex": "/clearspawnpoint @s" },
+    "de": { "short": "Löscht den persönlichen Spawnpunkt.", "details": "Der Spieler erscheint danach wieder am Welt-Spawnpunkt." },
+    "en": { "short": "Removes the personal spawn point.", "details": "The player respawns at the world spawn again afterwards." }
+  },
+  {
+    "id": "experience", "cat": "player",
+    "java": { "alias": ["xp"], "perm": 2, "since": "1.3.1", "forms": ["add <targets:player> <amount:int> [unit:points|levels]", "set <targets:player> <amount:int> [unit:points|levels]", "query <targets:player> (points|levels)"], "ex": "/xp add @s 30 levels" },
+    "bedrock": { "name": "xp", "perm": "gd", "since": "0.16.0", "forms": ["<amount:text> [player:player]"], "ex": "/xp 30L @s" },
+    "de": { "short": "Gibt oder nimmt Erfahrung.", "details": "In Java wählst du zwischen Punkten und Leveln. In Bedrock hängst du ein L an die Zahl, um ganze Level zu vergeben (30L), sonst sind es Punkte." },
+    "en": { "short": "Gives or takes experience.", "details": "In Java you choose between points and levels. In Bedrock, append an L to the number to give whole levels (30L); otherwise it counts as points." }
+  },
+  {
+    "id": "effect", "cat": "player",
+    "java": { "perm": 2, "since": "1.5", "forms": ["give <targets:target> <effect:effect> [seconds:text] [amplifier:int] [hideParticles:bool]", "clear [targets:target] [effect:effect]"], "ex": "/effect give @s night_vision infinite 0 true" },
+    "bedrock": { "perm": "gd", "forms": ["<player:target> <effect:effect> [seconds:int] [amplifier:int] [hideParticles:bool]", "<player:target> clear"], "ex": "/effect @s night_vision 600 0 true" },
+    "de": { "short": "Gibt oder entfernt Statuseffekte.", "details": "Der Verstärker zählt ab 0: 0 ist Stufe I, 1 ist Stufe II. In Java geht als Dauer auch infinite für unendlich, in Bedrock nur eine Zahl in Sekunden." },
+    "en": { "short": "Gives or removes status effects.", "details": "The amplifier starts at 0: 0 is level I, 1 is level II. Java also accepts infinite as duration; Bedrock only a number of seconds." }
+  },
+  {
+    "id": "enchant", "cat": "player",
+    "java": { "perm": 2, "since": "1.4.4", "forms": ["<targets:target> <enchantment:enchantment> [level:int]"], "ex": "/enchant @s sharpness 5" },
+    "bedrock": { "perm": "gd", "forms": ["<player:target> <enchantment:enchantment> [level:int]"], "ex": "/enchant @s sharpness 5" },
+    "de": { "short": "Verzaubert das Item in der Hand.", "details": "Der Spieler muss das Item in der Haupthand halten, und die Verzauberung muss zum Item passen. Höhere Stufen als im normalen Spiel sind damit nicht möglich." },
+    "en": { "short": "Enchants the held item.", "details": "The player must hold the item in the main hand and the enchantment has to fit the item. Levels above the normal maximum are not possible this way." }
+  },
+  {
+    "id": "spreadplayers", "cat": "player",
+    "java": { "perm": 2, "since": "1.6.1", "forms": ["<center:pos2> <spreadDistance:float> <maxRange:float> <respectTeams:bool> <targets:target>"], "ex": "/spreadplayers 0 0 50 500 false @a" },
+    "bedrock": { "perm": "gd", "forms": ["<x:float> <z:float> <spreadDistance:float> <maxRange:float> <victim:target>"], "ex": "/spreadplayers 0 0 50 500 @a" },
+    "de": { "short": "Verteilt Spieler zufällig in einem Gebiet.", "details": "Praktisch für Spielstarts: Alle landen an zufälligen Stellen mit einem Mindestabstand zueinander." },
+    "en": { "short": "Scatters players randomly across an area.", "details": "Great for game starts: everyone lands at random spots with a minimum distance between them." }
+  },
+  {
+    "id": "spectate", "cat": "player",
+    "java": { "perm": 2, "since": "1.15", "forms": ["[target:target] [player:player]"], "ex": "/spectate @e[type=cow,limit=1]" },
+    "de": { "short": "Lässt einen Zuschauer durch die Augen eines anderen sehen.", "details": "Funktioniert nur im Zuschauermodus. Ohne Angaben beendest du das Zuschauen wieder." },
+    "en": { "short": "Lets a spectator see through another entity's eyes.", "details": "Only works in spectator mode. Run it without arguments to stop spectating." }
+  },
+  {
+    "id": "ride", "cat": "entities",
+    "java": { "perm": 2, "since": "1.19.4", "forms": ["<target:target> mount <vehicle:target>", "<target:target> dismount"], "ex": "/ride @s mount @e[type=pig,limit=1,sort=nearest]" },
+    "bedrock": { "perm": "gd", "since": "1.16.100", "forms": ["<riders:target> start_riding <ride:target>", "<riders:target> stop_riding", "<rides:target> evict_riders", "<rides:target> summon_rider <entityType:entity>", "<riders:target> summon_ride <entityType:entity>"], "ex": "/ride @s start_riding @e[type=pig,c=1]" },
+    "de": { "short": "Lässt Objekte aufeinander reiten.", "details": "Setzt einen Spieler oder Mob auf ein anderes Wesen oder lässt ihn wieder absteigen." },
+    "en": { "short": "Makes entities ride each other.", "details": "Puts a player or mob onto another entity, or makes it dismount again." }
+  },
+  {
+    "id": "rotate", "cat": "entities",
+    "java": { "perm": 2, "since": "1.21.2", "forms": ["<target:target> <rotation:rot>", "<target:target> facing <location:pos>", "<target:target> facing entity <facingEntity:target>"], "ex": "/rotate @s 90 0" },
+    "de": { "short": "Dreht ein Objekt, ohne es zu bewegen.", "details": "Du gibst entweder die Blickrichtung in Grad an oder ein Ziel, auf das geschaut werden soll." },
+    "en": { "short": "Turns an entity without moving it.", "details": "You either give the view direction in degrees or a target to look at." }
+  },
+  {
+    "id": "attribute", "cat": "player",
+    "java": { "perm": 2, "since": "1.16", "forms": ["<target:target> <attribute:attribute> get", "<target:target> <attribute:attribute> base get", "<target:target> <attribute:attribute> base set <value:float>", "<target:target> <attribute:attribute> base reset"], "ex": "/attribute @s scale base set 2" },
+    "de": { "short": "Liest oder ändert Eigenschaften wie Leben, Tempo oder Größe.", "details": "Mit scale kannst du dich zum Beispiel riesig oder winzig machen, mit max_health mehr Herzen bekommen." },
+    "en": { "short": "Reads or changes attributes such as health, speed or size.", "details": "With scale you can become huge or tiny, with max_health you get more hearts." }
+  },
+  {
+    "id": "advancement", "cat": "player",
+    "java": { "perm": 2, "since": "1.12", "forms": ["(grant|revoke) <targets:player> everything", "(grant|revoke) <targets:player> only <advancement:text>", "(grant|revoke) <targets:player> (from|through|until) <advancement:text>"], "ex": "/advancement grant @s everything" },
+    "de": { "short": "Vergibt oder entzieht Fortschritte.", "details": "everything betrifft alle Fortschritte auf einmal, only einen einzelnen, zum Beispiel minecraft:story/mine_diamond." },
+    "en": { "short": "Grants or revokes advancements.", "details": "everything affects all advancements at once, only a single one such as minecraft:story/mine_diamond." }
+  },
+  {
+    "id": "recipe", "cat": "player",
+    "java": { "perm": 2, "since": "1.12", "forms": ["(give|take) <targets:player> <recipe:text>"], "ex": "/recipe give @s *" },
+    "bedrock": { "perm": "gd", "since": "1.20.30", "forms": ["(give|take) <player:player> <recipe:text>"], "ex": "/recipe give @s *" },
+    "de": { "short": "Schaltet Rezepte im Rezeptbuch frei oder sperrt sie.", "details": "Mit einem Sternchen (*) als Rezept sind alle Rezepte gemeint." },
+    "en": { "short": "Unlocks or locks recipes in the recipe book.", "details": "An asterisk (*) as recipe means all recipes." }
+  },
+  {
+    "id": "swing", "cat": "entities",
+    "java": { "perm": 2, "since": "26.1", "forms": ["[targets:target] [hand:mainhand|offhand]"], "ex": "/swing @s mainhand" },
+    "de": { "short": "Lässt ein Wesen den Arm schwingen.", "details": "Spielt nur die Schlag-Animation ab, ohne wirklich anzugreifen. Seit 26.3 gibt es zusätzliche Animationen; die genauen Angaben zeigt die Tab-Vervollständigung im Spiel." },
+    "en": { "short": "Makes an entity swing its arm.", "details": "Only plays the swing animation without actually attacking. Since 26.3 there are extra animations; in-game tab completion shows the exact options." }
+  },
+  {
+    "id": "inputpermission", "cat": "player",
+    "bedrock": { "perm": "gd", "since": "1.19.80", "forms": ["set <targets:player> <permission:input_permission> <state:enabled|disabled>", "query <targets:player> <permission:input_permission>"], "ex": "/inputpermission set @a movement disabled" },
+    "de": { "short": "Sperrt oder erlaubt Eingaben eines Spielers.", "details": "Damit kannst du zum Beispiel für eine Zwischensequenz das Laufen oder die Kamera sperren." },
+    "en": { "short": "Blocks or allows a player's inputs.", "details": "Lets you lock walking or the camera during a cutscene, for example." }
+  },
+  {
+    "id": "aimassist", "cat": "player",
+    "bedrock": { "perm": "gd", "since": "1.21.50", "forms": ["<players:player> set [xAngle:float] [yAngle:float] [maxDistance:float]", "<players:player> clear"], "ex": "/aimassist @s set" },
+    "de": { "short": "Schaltet die Zielhilfe für Spieler ein oder aus.", "details": "Die Zielhilfe zieht das Fadenkreuz leicht zu Zielen in der Nähe. Sie ist vor allem für eigene Kamera-Perspektiven gedacht." },
+    "en": { "short": "Turns aim assist on or off for players.", "details": "Aim assist gently pulls the crosshair towards nearby targets. It is mainly meant for custom camera perspectives." }
+  },
+  {
+    "id": "controlscheme", "cat": "player",
+    "bedrock": { "perm": "gd", "forms": ["<players:player> set <scheme:control_scheme>", "<players:player> clear"], "ex": "/controlscheme @s set camera_relative" },
+    "de": { "short": "Legt das Steuerungsschema fest.", "details": "Bestimmt, wie sich der Spieler bei eigenen Kameras bewegt, zum Beispiel relativ zur Kamera statt zur Blickrichtung." },
+    "en": { "short": "Sets the control scheme.", "details": "Defines how the player moves with custom cameras, e.g. relative to the camera instead of the view direction." }
+  },
+  {
+    "id": "kill", "cat": "entities",
+    "java": { "perm": 2, "since": "1.3.1", "forms": ["[targets:target]"], "ex": "/kill @e[type=zombie]" },
+    "bedrock": { "perm": "gd", "since": "0.16.0", "forms": ["[target:target]"], "ex": "/kill @e[type=zombie]" },
+    "de": { "short": "Tötet Spieler, Mobs oder andere Objekte.", "details": "Ohne Ziel trifft es dich selbst. Vorsicht mit @e: Das löscht alles, auch Items, Rahmen und Boote." },
+    "en": { "short": "Kills players, mobs or other entities.", "details": "Without a target it hits yourself. Careful with @e: it removes everything, including items, frames and boats." }
+  },
+  {
+    "id": "summon", "cat": "entities",
+    "java": { "perm": 2, "since": "1.7.2", "forms": ["<entity:entity> [pos:pos] [nbt:text]"], "ex": "/summon lightning_bolt ~ ~ ~" },
+    "bedrock": { "perm": "gd", "since": "0.16.0", "forms": ["<entityType:entity> [spawnPos:pos]", "<entityType:entity> <nameTag:text> [spawnPos:pos]"], "ex": "/summon lightning_bolt ~ ~ ~" },
+    "de": { "short": "Erschafft ein Mob oder ein anderes Objekt.", "details": "Funktioniert für Tiere, Monster, Blitze, Boote und mehr. In Java kannst du mit NBT-Daten Zusatzeigenschaften mitgeben." },
+    "en": { "short": "Spawns a mob or another entity.", "details": "Works for animals, monsters, lightning, boats and more. In Java you can pass extra properties as NBT data." }
+  },
+  {
+    "id": "damage", "cat": "entities",
+    "java": { "perm": 2, "since": "1.19.4", "forms": ["<target:target> <amount:float> [damageType:damage_type]"], "ex": "/damage @s 4 fall" },
+    "bedrock": { "perm": "gd", "since": "1.18.10", "forms": ["<target:target> <amount:int> [cause:damage_cause]"], "ex": "/damage @s 4 fall" },
+    "de": { "short": "Fügt einem Ziel Schaden zu.", "details": "Zwei Schadenspunkte sind ein Herz. Mit der Schadensart bestimmst du, ob zum Beispiel Rüstung schützt." },
+    "en": { "short": "Deals damage to a target.", "details": "Two damage points equal one heart. The damage type decides whether armour protects, for example." }
+  },
+  {
+    "id": "tag", "cat": "entities",
+    "java": { "perm": 2, "since": "1.13", "forms": ["<targets:target> add <name:text>", "<targets:target> remove <name:text>", "<targets:target> list"], "ex": "/tag @s add team_rot" },
+    "bedrock": { "perm": "gd", "since": "1.9.0", "forms": ["<entity:target> add <name:text>", "<entity:target> remove <name:text>", "<entity:target> list"], "ex": "/tag @s add team_rot" },
+    "de": { "short": "Hängt Markierungen an Objekte.", "details": "Markierungen (Tags) sind unsichtbare Etiketten. Mit @e[tag=name] kannst du später genau diese Objekte auswählen." },
+    "en": { "short": "Attaches tags to entities.", "details": "Tags are invisible labels. With @e[tag=name] you can select exactly those entities later." }
+  },
+  {
+    "id": "event", "cat": "entities",
+    "bedrock": { "perm": "gd", "since": "1.16.100", "forms": ["entity <target:target> <eventName:text>"], "ex": "/event entity @e[type=creeper] minecraft:become_charged" },
+    "de": { "short": "Löst ein Ereignis bei einem Objekt aus.", "details": "Ereignisse stammen aus den Verhaltensdateien der Mobs, zum Beispiel wird ein Creeper damit geladen." },
+    "en": { "short": "Triggers an event on an entity.", "details": "Events come from the mobs' behaviour files; for example, this can charge a creeper." }
+  },
+  {
+    "id": "playanimation", "cat": "entities",
+    "bedrock": { "perm": "gd", "since": "1.16.100", "forms": ["<entity:target> <animation:text>"], "ex": "/playanimation @e[type=armor_stand] animation.armor_stand.entertain_pose" },
+    "de": { "short": "Spielt eine Animation an einem Objekt ab.", "details": "Die Animation muss in einem Ressourcenpaket vorhanden sein." },
+    "en": { "short": "Plays an animation on an entity.", "details": "The animation has to exist in a resource pack." }
+  }
+]

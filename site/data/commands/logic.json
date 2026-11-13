@@ -1,0 +1,157 @@
+[
+  {
+    "id": "execute", "cat": "logic",
+    "java": { "perm": 2, "since": "1.8", "forms": ["as <targets:target> run <command:text>", "at <targets:target> run <command:text>", "as <targets:target> at @s run <command:text>", "positioned <pos:pos> run <command:text>", "in <dimension:dimension> run <command:text>", "if entity <targets:target> run <command:text>", "unless entity <targets:target> run <command:text>", "if block <pos:pos> <block:block> run <command:text>", "if score <target:target> <objective:text> matches <range:text> run <command:text>"], "ex": "/execute as @a at @s run summon lightning_bolt ~ ~ ~" },
+    "bedrock": { "perm": "gd", "since": "0.16.0", "forms": ["as <origin:target> run <command:text>", "at <origin:target> run <command:text>", "as <origin:target> at @s run <command:text>", "positioned <position:pos> run <command:text>", "in <dimension:dimension> run <command:text>", "if entity <target:target> run <command:text>", "unless entity <target:target> run <command:text>", "if block <position:pos> <block:block> run <command:text>", "if score <target:target> <objective:text> matches <range:text> run <command:text>"], "ex": "/execute as @a at @s run summon lightning_bolt ~ ~ ~" },
+    "de": { "short": "Führt einen anderen Command unter bestimmten Bedingungen aus.", "details": "Der mächtigste Command: as bestimmt, wer ausführt, at wo, if und unless prüfen Bedingungen. Die Teile lassen sich beliebig aneinanderreihen; der Builder zeigt die häufigsten Formen. Den Command hinter run schreibst du ohne Schrägstrich." },
+    "en": { "short": "Runs another command under certain conditions.", "details": "The most powerful command: as sets who runs it, at where, if and unless check conditions. The parts can be chained freely; the builder shows the most common forms. Write the command after run without a slash." }
+  },
+  {
+    "id": "function", "cat": "logic",
+    "java": { "perm": 2, "since": "1.12", "forms": ["<name:text>"], "ex": "/function meinpack:start" },
+    "bedrock": { "perm": "gd", "since": "1.8.0", "forms": ["<name:text>"], "ex": "/function start" },
+    "de": { "short": "Führt eine Funktion aus einem Datenpaket aus.", "details": "Eine Funktion ist eine Textdatei mit vielen Commands, die nacheinander ablaufen." },
+    "en": { "short": "Runs a function from a data pack.", "details": "A function is a text file with many commands that run one after another." }
+  },
+  {
+    "id": "schedule", "cat": "logic",
+    "java": { "perm": 2, "since": "1.14", "forms": ["function <function:text> <time:text> [mode:append|replace]", "clear <function:text>"], "ex": "/schedule function meinpack:start 5s" },
+    "bedrock": { "perm": "gd", "since": "1.16.100", "forms": ["delay add <function:text> <time:text> [mode:append|replace]", "delay clear <function:text>", "on_area_loaded add <from:pos> <to:pos> <function:text>"], "ex": "/schedule delay add start 5s" },
+    "de": { "short": "Führt eine Funktion später aus.", "details": "Die Wartezeit gibst du in Ticks (100t), Sekunden (5s) oder Spieltagen (1d) an." },
+    "en": { "short": "Runs a function later.", "details": "The delay is given in ticks (100t), seconds (5s) or in-game days (1d)." }
+  },
+  {
+    "id": "scoreboard", "cat": "logic",
+    "java": { "perm": 2, "since": "1.5", "forms": ["objectives add <objective:text> <criteria:criteria> [displayName:text]", "objectives remove <objective:text>", "objectives list", "objectives setdisplay <slot:display_slot> [objective:text]", "players (set|add|remove) <targets:target> <objective:text> <score:int>", "players get <target:target> <objective:text>", "players reset <targets:target> [objective:text]", "players list [target:target]", "players operation <targets:target> <targetObjective:text> <operation:score_operation> <source:target> <sourceObjective:text>"], "ex": "/scoreboard objectives add punkte dummy" },
+    "bedrock": { "perm": "gd", "since": "1.7.0", "forms": ["objectives add <objective:text> dummy [displayName:text]", "objectives remove <objective:text>", "objectives list", "objectives setdisplay <slot:display_slot> [objective:text] [sortOrder:ascending|descending]", "players (set|add|remove) <player:target> <objective:text> <count:int>", "players reset <player:target> [objective:text]", "players list [playername:target]", "players random <player:target> <objective:text> <min:int> <max:int>", "players test <player:target> <objective:text> <min:text> [max:text]", "players operation <targetName:target> <targetObjective:text> <operation:score_operation> <selector:target> <objective:text>"], "ex": "/scoreboard objectives add punkte dummy" },
+    "de": { "short": "Verwaltet Punktestände.", "details": "Zuerst legst du mit objectives add eine Wertung an, dann änderst du mit players die Punkte. Mit setdisplay erscheint die Wertung am Bildschirmrand. Bedrock kennt nur das Kriterium dummy." },
+    "en": { "short": "Manages scores.", "details": "First create an objective with objectives add, then change points with players. setdisplay shows the objective on screen. Bedrock only knows the dummy criterion." }
+  },
+  {
+    "id": "team", "cat": "logic",
+    "java": { "perm": 2, "since": "1.13", "forms": ["add <team:text> [displayName:text]", "remove <team:text>", "join <team:text> [members:target]", "leave <members:target>", "list [team:text]", "empty <team:text>", "modify <team:text> color <value:color>", "modify <team:text> friendlyFire <value:bool>", "modify <team:text> nametagVisibility <value:never|always|hideForOtherTeams|hideForOwnTeam>", "modify <team:text> collisionRule <value:always|never|pushOtherTeams|pushOwnTeam>"], "ex": "/team add rot" },
+    "de": { "short": "Verwaltet Teams.", "details": "Teams können eine Farbe bekommen, und du kannst einstellen, ob sich Teammitglieder gegenseitig verletzen können." },
+    "en": { "short": "Manages teams.", "details": "Teams can get a colour, and you can set whether team members can hurt each other." }
+  },
+  {
+    "id": "trigger", "cat": "logic",
+    "java": { "perm": 0, "since": "1.8", "forms": ["<objective:text>", "<objective:text> (add|set) <value:int>"], "ex": "/trigger spawn" },
+    "de": { "short": "Lässt normale Spieler einen Punktestand auslösen.", "details": "Funktioniert nur bei Wertungen mit dem Kriterium trigger, die für den Spieler freigeschaltet wurden. So können Spieler ohne Operator-Rechte Aktionen starten." },
+    "en": { "short": "Lets normal players trigger a score.", "details": "Only works for objectives with the trigger criterion that were enabled for the player. This lets players without operator rights start actions." }
+  },
+  {
+    "id": "data", "cat": "logic",
+    "java": { "perm": 2, "since": "1.13", "forms": ["get entity <target:target> [path:text]", "get block <targetPos:pos> [path:text]", "get storage <id:text> [path:text]", "merge entity <target:target> <nbt:text>", "merge block <targetPos:pos> <nbt:text>", "modify entity <target:target> <path:text> set value <value:text>", "remove entity <target:target> <path:text>"], "ex": "/data get entity @s Pos" },
+    "de": { "short": "Liest oder ändert gespeicherte Daten (NBT).", "details": "Jeder Mob und viele Blöcke haben versteckte Daten wie Position, Leben oder Inventar. Die Daten von Spielern lassen sich nur lesen, nicht ändern." },
+    "en": { "short": "Reads or changes stored data (NBT).", "details": "Every mob and many blocks have hidden data such as position, health or inventory. Player data can only be read, not changed." }
+  },
+  {
+    "id": "datapack", "cat": "logic",
+    "java": { "perm": 2, "since": "1.13", "forms": ["list [filter:available|enabled]", "enable <name:text>", "disable <name:text>"], "ex": "/datapack list" },
+    "de": { "short": "Schaltet Datenpakete an oder aus.", "details": "Datenpakete fügen der Welt eigene Rezepte, Funktionen, Fortschritte und mehr hinzu." },
+    "en": { "short": "Enables or disables data packs.", "details": "Data packs add custom recipes, functions, advancements and more to the world." }
+  },
+  {
+    "id": "reload", "cat": "logic",
+    "java": { "perm": 2, "since": "1.12", "forms": [""], "ex": "/reload" },
+    "bedrock": { "perm": "admin", "forms": ["", "all"], "ex": "/reload" },
+    "de": { "short": "Lädt Datenpakete und Funktionen neu.", "details": "Nützlich, wenn du eine Funktion geändert hast und sie testen willst, ohne die Welt neu zu starten." },
+    "en": { "short": "Reloads data packs and functions.", "details": "Useful after editing a function when you want to test it without restarting the world." }
+  },
+  {
+    "id": "random", "cat": "logic",
+    "java": { "perm": 0, "since": "1.20.2", "forms": ["(value|roll) <range:text> [sequence:text]", "reset <sequence:text> [seed:int]"], "ex": "/random roll 1..6" },
+    "de": { "short": "Würfelt eine Zufallszahl.", "details": "roll zeigt das Ergebnis allen im Chat, value nur dir. Der Bereich wird mit zwei Punkten geschrieben, zum Beispiel 1..6." },
+    "en": { "short": "Rolls a random number.", "details": "roll shows the result to everyone in chat, value only to you. The range is written with two dots, e.g. 1..6." }
+  },
+  {
+    "id": "return", "cat": "logic",
+    "java": { "perm": 2, "since": "1.20.2", "forms": ["<value:int>", "fail", "run <command:text>"], "ex": "/return 1" },
+    "de": { "short": "Beendet eine Funktion und gibt einen Wert zurück.", "details": "Wird nur innerhalb von Funktionen gebraucht, um sie vorzeitig zu verlassen." },
+    "en": { "short": "Ends a function and returns a value.", "details": "Only needed inside functions to leave them early." }
+  },
+  {
+    "id": "stopwatch", "cat": "logic",
+    "java": { "perm": 2, "since": "1.21.11", "forms": ["create <id:text>", "query <id:text> [scale:float]", "restart <id:text>", "remove <id:text>"], "ex": "/stopwatch create rennen" },
+    "de": { "short": "Misst echte Zeit mit benannten Stoppuhren.", "details": "Anders als Spiel-Ticks läuft eine Stoppuhr in Echtzeit, also ideal für Wettrennen und Minispiele." },
+    "en": { "short": "Measures real time with named stopwatches.", "details": "Unlike game ticks, a stopwatch runs in real time, which is ideal for races and minigames." }
+  },
+  {
+    "id": "compute", "cat": "logic",
+    "java": { "perm": 2, "since": "26.3", "forms": ["<number_provider:text>"], "ex": "/compute" },
+    "de": { "short": "Berechnet einen Wert aus einem Zahlengeber.", "details": "Neu in Java 26.3 und vor allem für Datenpaket-Entwickler gedacht. Die genaue Schreibweise bitte im Spiel mit der Tab-Taste prüfen." },
+    "en": { "short": "Computes a value from a number provider.", "details": "New in Java 26.3 and mainly meant for data pack developers. Please check the exact syntax in-game with tab completion." }
+  },
+  {
+    "id": "test", "cat": "logic",
+    "java": { "perm": 2, "since": "1.21.5", "forms": ["run <tests:text>", "runclosest", "runthese", "runfailed", "clearall [radius:int]", "stop"], "ex": "/test runclosest" },
+    "de": { "short": "Startet automatische Spieltests (GameTests).", "details": "Ein Werkzeug für Entwickler von Datenpaketen, um Mechaniken automatisch zu prüfen." },
+    "en": { "short": "Runs automated game tests (GameTests).", "details": "A tool for data pack developers to check mechanics automatically." }
+  },
+  {
+    "id": "gametest", "cat": "logic",
+    "bedrock": { "perm": "gd", "since": "1.16.210", "forms": ["run <testName:text>", "runset [tag:text]", "runthis", "clearall", "stopall"], "ex": "/gametest runset" },
+    "de": { "short": "Startet automatische Spieltests (GameTests).", "details": "Ein Werkzeug für Entwickler von Add-ons, um Mechaniken automatisch zu prüfen." },
+    "en": { "short": "Runs automated game tests (GameTests).", "details": "A tool for add-on developers to check mechanics automatically." }
+  },
+  {
+    "id": "testfor", "cat": "logic",
+    "bedrock": { "perm": "gd", "forms": ["<victim:target>"], "ex": "/testfor @e[type=cow,r=10]" },
+    "de": { "short": "Zählt Objekte, die zu einer Auswahl passen.", "details": "Wird oft in Befehlsblöcken benutzt, um zu prüfen, ob jemand in der Nähe ist." },
+    "en": { "short": "Counts entities that match a selector.", "details": "Often used in command blocks to check whether someone is nearby." }
+  },
+  {
+    "id": "testforblock", "cat": "logic",
+    "bedrock": { "perm": "gd", "since": "0.16.0", "forms": ["<position:pos> <tileName:block> [dataValue:int]"], "ex": "/testforblock ~ ~-1 ~ grass_block" },
+    "de": { "short": "Prüft, ob an einer Stelle ein bestimmter Block ist.", "details": "Gibt Erfolg zurück, wenn der Block passt. Praktisch für Befehlsblock-Schaltungen." },
+    "en": { "short": "Checks whether a certain block is at a position.", "details": "Succeeds if the block matches. Handy for command block circuits." }
+  },
+  {
+    "id": "testforblocks", "cat": "logic",
+    "bedrock": { "perm": "gd", "since": "0.16.0", "forms": ["<begin:pos> <end:pos> <destination:pos> [mode:all|masked]"], "ex": "/testforblocks 0 64 0 5 70 5 20 64 0" },
+    "de": { "short": "Vergleicht zwei Bereiche Block für Block.", "details": "Damit lässt sich prüfen, ob ein Spieler etwas genau nachgebaut hat." },
+    "en": { "short": "Compares two regions block by block.", "details": "Lets you check whether a player rebuilt something exactly." }
+  },
+  {
+    "id": "script", "cat": "logic",
+    "bedrock": { "perm": "admin", "forms": ["debugger listen <port:int>", "debugger connect [host:text] [port:int]", "debugger close", "profiler (start|stop)", "watchdog exportstats"], "ex": "/script debugger listen 19144" },
+    "de": { "short": "Hilfsmittel zum Untersuchen von Skripten.", "details": "Für Add-on-Entwickler: verbindet einen Debugger oder misst, wie schnell Skripte laufen." },
+    "en": { "short": "Debugging tools for scripts.", "details": "For add-on developers: connects a debugger or measures how fast scripts run." }
+  },
+  {
+    "id": "scriptevent", "cat": "logic",
+    "bedrock": { "perm": "gd", "forms": ["<messageId:text> <message:text>"], "ex": "/scriptevent meinpack:start Hallo" },
+    "de": { "short": "Schickt ein Ereignis an Skripte.", "details": "Add-on-Skripte können darauf reagieren. Die Kennung braucht einen eigenen Namensraum wie meinpack:name." },
+    "en": { "short": "Sends an event to scripts.", "details": "Add-on scripts can react to it. The id needs its own namespace such as mypack:name." }
+  },
+  {
+    "id": "fetchprofile", "cat": "logic",
+    "java": { "perm": 2, "since": "1.21.9", "forms": ["name <name:text>", "id <uuid:text>", "entity <target:target>"], "ex": "/fetchprofile name Niklas" },
+    "de": { "short": "Ruft das Profil eines Spielers ab.", "details": "Zeigt Name, UUID und Skin-Daten. Nützlich, um Spielerköpfe mit einem bestimmten Skin zu bauen." },
+    "en": { "short": "Fetches a player's profile.", "details": "Shows name, UUID and skin data. Useful for making player heads with a specific skin." }
+  },
+  {
+    "id": "debug", "cat": "logic",
+    "java": { "perm": 3, "since": "1.3.1", "forms": ["(start|stop)", "function <name:text>"], "ex": "/debug start" },
+    "de": { "short": "Zeichnet Leistungsdaten zur Fehlersuche auf.", "details": "Nach stop liegt ein Bericht im Ordner debug der Spielinstallation." },
+    "en": { "short": "Records performance data for troubleshooting.", "details": "After stop, a report is saved in the debug folder of the game installation." }
+  },
+  {
+    "id": "jfr", "cat": "logic",
+    "java": { "perm": 4, "since": "1.18", "forms": ["(start|stop)"], "ex": "/jfr start" },
+    "de": { "short": "Startet eine Leistungsaufzeichnung von Java.", "details": "Java Flight Recorder: ein Profi-Werkzeug, um Leistungsprobleme zu finden." },
+    "en": { "short": "Starts a Java performance recording.", "details": "Java Flight Recorder: a professional tool for finding performance problems." }
+  },
+  {
+    "id": "perf", "cat": "logic",
+    "java": { "perm": 4, "since": "1.17", "forms": ["(start|stop)"], "ex": "/perf start" },
+    "de": { "short": "Misst zehn Sekunden lang die Server-Leistung.", "details": "Funktioniert nur auf einem eigenständigen Server und speichert einen Bericht." },
+    "en": { "short": "Measures server performance for ten seconds.", "details": "Only works on a dedicated server and saves a report." }
+  },
+  {
+    "id": "version", "cat": "logic",
+    "java": { "perm": 2, "since": "1.21.6", "forms": [""], "ex": "/version" },
+    "de": { "short": "Zeigt die Spielversion des Servers.", "details": "Praktisch, um schnell zu prüfen, welche Version gerade läuft." },
+    "en": { "short": "Shows the server's game version.", "details": "Handy for quickly checking which version is running." }
+  }
+]
