@@ -1,11 +1,11 @@
 {
   "_hinweis": "Angaben für Impressum und Datenschutz. Leere Felder werden auf der Seite gelb als 'bitte ergänzen' markiert.",
-  "owner": "Niklas Pohl",
+  "owner": "Thomas Pohl",
   "careOf": "",
   "street": "Max-Planck-Str. 36",
   "city": "75175 Pforzheim",
   "country": "Deutschland",
-  "email": "",
+  "email": "postmaster@niklaspohl.de",
   "hoster": "Netbeat (netbeat.de)",
   "dataVersion": { "java": "26.3", "bedrock": "26.60", "checked": "2026-11-13" },
   "commandFiles": ["world", "player", "items", "chat", "effects", "logic", "server"]
