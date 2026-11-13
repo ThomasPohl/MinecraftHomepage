@@ -18,6 +18,7 @@ Kein offizielles Minecraft-Produkt. Nicht von Mojang oder Microsoft genehmigt od
 | `site/` | die Webseite; genau dieser Ordner wird hochgeladen |
 | `site/data/commands/*.json` | die Commands (Daten getrennt vom Code) |
 | `site/data/lists.json` | Auswahllisten für den Builder (Items, Mobs, Effekte …) |
+| `site/data/selectors.json` | Ziel-Auswahlen (`@s`, `@a` …) mit Erklärungen und Filter-Beispielen |
 | `site/data/site.json` | Angaben fürs Impressum, Datenstand, Liste der Command-Dateien |
 | `site/js/` | App-Logik (reines JavaScript, kein Build-Schritt) |
 | `scripts/validate.mjs` | prüft die Daten, läuft auch bei jedem Push |

@@ -65,6 +65,13 @@ Array (gilt für beide Editionen), `{ "java": [...], "bedrock": [...] }` oder zu
 anderen als durchsuchbares Feld, in das man auch eigene Werte tippen kann. IDs unterscheiden
 sich teils zwischen Java und Bedrock (z. B. `villager` / `villager_v2`).
 
+## Ziel-Auswahlen (`site/data/selectors.json`)
+
+Parameter vom Typ `target` und `player` zeigen ein Dropdown mit erklärten Selektoren (`@s`, `@p` …)
+plus ein freies Feld für Spielernamen oder Filter; darunter steht eine Hilfe mit Filter-Beispielen.
+`player: true` heißt, der Selektor wählt nur Spieler aus und ist auch bei Typ `player` erlaubt.
+Filter-Beispiele sind je Edition getrennt (Java `distance=..10`, Bedrock `r=10`).
+
 ## Nach einem Minecraft-Update
 
 1. Changelogs von Java und Bedrock auf neue, geänderte oder entfernte Commands prüfen

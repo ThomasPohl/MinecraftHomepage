@@ -1,7 +1,6 @@
 {
   "_hinweis": "Auswahllisten für den Command-Builder. Form: Array (gilt für beide Editionen), {java:[], bedrock:[]} oder zusätzlich \"free\": true, wenn freie Eingaben üblich sind. Listen mit bis zu 15 Einträgen ohne free werden als Dropdown gezeigt, alle anderen als durchsuchbares Feld mit freier Eingabe.",
 
-  "selector": { "free": true, "values": ["@s", "@p", "@a", "@r", "@e", "@n"] },
 
   "gamemode": {
     "java": ["survival", "creative", "adventure", "spectator"],
