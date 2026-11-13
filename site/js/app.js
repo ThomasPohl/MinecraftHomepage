@@ -290,7 +290,6 @@ function renderDetail(id) {
   const alias = (ed.alias || []).map((a) => '/' + a).join(', ');
   document.title = `/${name} – ${t('title')}`;
   const forms = ed.forms || [''];
-  builder = { name, edition: e, forms, index: 0, tokens: [] };
 
   app.innerHTML = `
     <a class="back" href="#/">${esc(t('back'))}</a>
@@ -336,6 +335,8 @@ function renderDetail(id) {
       <ul class="syntax">${forms.map((f) => `<li>${esc(formSyntax(name, f))}</li>`).join('')}</ul>
     </section>`;
 
+  // Erst nach dem Austausch der Seite setzen: beim Entfernen alter Felder können noch Ereignisse feuern
+  builder = { name, edition: e, forms, index: 0, tokens: [] };
   renderFields();
   const formSel = document.getElementById('b-form');
   if (formSel) formSel.addEventListener('change', () => { builder.index = Number(formSel.value); renderFields(); });
@@ -461,6 +462,7 @@ function renderFields() {
 
 function updateOutput(ev) {
   const box = document.getElementById('b-fields');
+  if (!box) return;
   const src = ev && ev.target;
   if (src && src.nodeType === 1 && !box.contains(src)) return;   // Ereignis eines alten, schon ersetzten Feldes
   if (src && src.dataset && (src.dataset.pcat !== undefined || src.dataset.psearch !== undefined)) refreshPicker(src);
