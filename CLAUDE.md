@@ -68,19 +68,20 @@ sich teils zwischen Java und Bedrock (z. B. `villager` / `villager_v2`).
 
 ## Item- und Block-Katalog (`site/data/catalog.json`)
 
-Parameter vom Typ `item` und `block` zeigen eine Auswahl mit Kategorie-Filter, Suche und
+Parameter vom Typ `item` und `block` zeigen eine vollständige Auswahl mit Kategorie-Filter, Suche und
 deutschen/englischen Namen sowie ein freies Feld für eigene IDs. Eintrag:
 `[id, deutscher Name, englischer Name, Kategorie, Art]`; Art `i` = nur Item (Standard), `b` = nur
 Block, `ib` = beides. Ein optionales sechstes Feld nennt die Edition (`j` = nur Java, `b` = nur
 Bedrock), weil manche IDs sich unterscheiden (Java `light`, Bedrock `light_block_15`).
 Deutsche Namen wie im Spiel schreiben.
 
-- **Blöcke** (Art `b`/`ib`) werden vollständig erzeugt, nicht von Hand gepflegt:
-  `python3 -I tools/build_block_catalog.py <minecraft-data> <java-version> <bedrock-version>`
+- **Blöcke und Items** werden vollständig erzeugt, nicht von Hand gepflegt:
+  `python3 -I tools/build_catalog.py <minecraft-data> <java-version> <bedrock-version>`
   mit einem Checkout von github.com/PrismarineJS/minecraft-data (liefert nur IDs und englische
   Namen). Deutsche Namen, Kategorien, ausgeschlossene technische Blöcke und Bedrock-Aliasse
   stehen als Regeln und Tabellen im Skript; Korrekturen dort eintragen und neu erzeugen.
-- **Reine Items** (Art `i`) sind eine handgepflegte Auswahl häufiger Items; das Skript lässt sie stehen.
+- Bei reinen Items (Art `i`) behält das Skript deutsche Namen, die schon im Katalog stehen; einzelne
+  Namen kann man also auch direkt in `catalog.json` korrigieren.
 
 ## Ziel-Auswahlen (`site/data/selectors.json`)
 

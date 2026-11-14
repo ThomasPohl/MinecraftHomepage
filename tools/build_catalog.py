@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-"""Erzeugt die Block-Einträge in site/data/catalog.json aus den offenen Registry-Daten
+"""Erzeugt die Block- und Item-Einträge in site/data/catalog.json aus den offenen Registry-Daten
 von PrismarineJS/minecraft-data (https://github.com/PrismarineJS/minecraft-data).
 
 Übernommen werden nur Fakten (Block-IDs, englische Anzeigenamen). Die deutschen Namen werden
 hier über Regeln und die Tabelle MANUAL gebildet; wo keine Regel passt, steht der englische Name.
-Reine Item-Einträge (Art "i") im Katalog bleiben unverändert.
+Bei reinen Items (Art "i") bleiben bereits im Katalog stehende deutsche Namen erhalten.
 
-Aufruf:  python3 -I tools/build_block_catalog.py <pfad-zu-minecraft-data> <java-version> <bedrock-version>
-Beispiel: python3 -I tools/build_block_catalog.py ../minecraft-data 26.1 1.26.60
+Aufruf:  python3 -I tools/build_catalog.py <pfad-zu-minecraft-data> <java-version> <bedrock-version>
+Beispiel: python3 -I tools/build_catalog.py ../minecraft-data 26.1 1.26.60
 """
 import json
 import re
@@ -189,7 +189,7 @@ MANUAL = {
     "small_dripleaf": "Kleines Tropfblatt", "hanging_roots": "Hängewurzeln", "mangrove_roots": "Mangrovenwurzeln",
     "muddy_mangrove_roots": "Schlammige Mangrovenwurzeln", "mangrove_propagule": "Mangroven-Keimling",
     "pumpkin": "Kürbis", "carved_pumpkin": "Geschnitzter Kürbis", "jack_o_lantern": "Kürbislaterne", "melon": "Melone",
-    "wheat": "Weizenpflanzen", "carrots": "Karotten", "potatoes": "Kartoffeln", "beetroots": "Rote Bete",
+    "wheat": "Weizen", "carrots": "Karotten", "potatoes": "Kartoffeln", "beetroots": "Rote Bete",
     "nether_wart": "Netherwarze", "cocoa": "Kakao", "bee_nest": "Bienennest", "beehive": "Bienenstock",
     "turtle_egg": "Schildkrötenei", "sniffer_egg": "Schnüffler-Ei", "frogspawn": "Froschlaich",
     "ochre_froglight": "Ockernes Froschlicht", "verdant_froglight": "Grünes Froschlicht",
@@ -374,6 +374,138 @@ def category(name, old):
     return "building"
 
 
+# ==========================================================================
+# Items (alles, was kein Block ist)
+# ==========================================================================
+ITEM_SKIP = [
+    r"^item\.", r"_cushion$", r"^(agent|npc)_spawn_egg$", r"^hard_", r"^double_stone", r"^stone_block_slab", r"^colored_torch",
+    r"^(balloon|bleach|board|chemistry_table|compound|glow_stick|ice_bomb|medicine|photo_item|portfolio|rapid_fertilizer|sparkler)$",
+    r"^(banner|banner_pattern|boat|chest_boat|carpet|concrete|concrete_powder|coral|coral_block|coral_fan|coral_fan_dead|"
+    r"double_plant|dye|fence|leaves2?|log2?|planks|red_flower|sapling|skull|stained_.*|wood|wooden_slab|wool|tallgrass|"
+    r"monster_egg|spawn_egg|netherbrick|stonebrick|light_block|shulker_box|air)$",
+]
+MATERIALS = {"wooden": "Holz", "stone": "Stein", "copper": "Kupfer", "iron": "Eisen", "golden": "Gold", "diamond": "Diamant",
+             "netherite": "Netherit", "leather": "Leder", "chainmail": "Ketten"}
+GEAR = {"sword": "schwert", "pickaxe": "spitzhacke", "axe": "axt", "shovel": "schaufel", "hoe": "hacke", "spear": "speer",
+        "helmet": "helm", "chestplate": "brustplatte", "leggings": "beinschutz", "boots": "stiefel"}
+GEAR_SPECIAL = {"leather_helmet": "Lederkappe", "leather_chestplate": "Lederjacke", "leather_leggings": "Lederhose",
+                "chainmail_helmet": "Kettenhaube", "chainmail_chestplate": "Kettenhemd", "chainmail_leggings": "Kettenhose",
+                "turtle_helmet": "Schildkrötenpanzer"}
+HORSE = {"leather": "Lederne", "copper": "Kupferne", "iron": "Eiserne", "golden": "Goldene", "diamond": "Diamantene",
+         "netherite": "Netherit-"}
+MOBS = {
+    "allay": "Hilfsgeist", "armadillo": "Gürteltier", "axolotl": "Axolotl", "bat": "Fledermaus", "bee": "Bienen",
+    "blaze": "Lohen", "bogged": "Sumpfskelett", "breeze": "Böen", "camel": "Kamel", "cat": "Katzen",
+    "cave_spider": "Höhlenspinnen", "chicken": "Hühner", "cod": "Kabeljau", "cow": "Kuh", "creaking": "Knarz",
+    "creeper": "Creeper", "dolphin": "Delfin", "donkey": "Esel", "drowned": "Ertrunkenen", "elder_guardian": "Großer-Wächter",
+    "ender_dragon": "Enderdrachen", "enderman": "Enderman", "endermite": "Endermilben", "evoker": "Magier", "fox": "Fuchs",
+    "frog": "Frosch", "ghast": "Ghast", "happy_ghast": "Glücklicher-Ghast", "glow_squid": "Leuchttintenfisch", "goat": "Ziegen",
+    "guardian": "Wächter", "hoglin": "Hoglin", "horse": "Pferde", "husk": "Wüstenzombie", "iron_golem": "Eisengolem",
+    "llama": "Lama", "magma_cube": "Magmawürfel", "mooshroom": "Mooshroom", "mule": "Maultier", "ocelot": "Ozelot",
+    "panda": "Panda", "parrot": "Papageien", "phantom": "Phantom", "pig": "Schweine", "piglin": "Piglin",
+    "piglin_brute": "Piglin-Barbaren", "pillager": "Plünderer", "polar_bear": "Eisbären", "pufferfish": "Kugelfisch",
+    "rabbit": "Kaninchen", "ravager": "Verwüster", "salmon": "Lachs", "sheep": "Schaf", "shulker": "Shulker",
+    "silverfish": "Silberfischchen", "skeleton": "Skelett", "skeleton_horse": "Skelettpferde", "slime": "Schleim",
+    "sniffer": "Schnüffler", "snow_golem": "Schneegolem", "spider": "Spinnen", "squid": "Tintenfisch", "stray": "Eiswanderer",
+    "strider": "Schreiter", "tadpole": "Kaulquappen", "trader_llama": "Händlerlama", "tropical_fish": "Tropenfisch",
+    "turtle": "Schildkröten", "vex": "Plagegeist", "villager": "Dorfbewohner", "vindicator": "Diener",
+    "wandering_trader": "Fahrender-Händler", "warden": "Wärter", "witch": "Hexen", "wither": "Wither",
+    "wither_skeleton": "Witherskelett", "wolf": "Wolf", "zoglin": "Zoglin", "zombie": "Zombie", "zombie_horse": "Zombiepferde",
+    "zombie_villager": "Zombiedorfbewohner", "zombified_piglin": "Zombie-Piglin", "zombie_pigman": "Zombie-Piglin",
+    "copper_golem": "Kupfergolem", "nautilus": "Nautilus", "zombie_nautilus": "Zombie-Nautilus",
+}
+ITEM_MANUAL = {
+    "beef": "Rohes Rindfleisch", "porkchop": "Rohes Schweinefleisch", "chicken": "Rohes Hühnchen", "mutton": "Rohes Hammelfleisch",
+    "rabbit": "Rohes Kaninchen", "cooked_rabbit": "Gebratenes Kaninchen", "cod": "Roher Kabeljau", "salmon": "Roher Lachs",
+    "tropical_fish": "Tropenfisch", "pufferfish": "Kugelfisch", "rotten_flesh": "Verrottetes Fleisch",
+    "spider_eye": "Spinnenauge", "fermented_spider_eye": "Fermentiertes Spinnenauge", "poisonous_potato": "Giftige Kartoffel",
+    "beetroot": "Rote Bete", "beetroot_soup": "Borschtsch", "beetroot_seeds": "Rote-Bete-Samen", "mushroom_stew": "Pilzsuppe",
+    "rabbit_stew": "Kaninchenragout", "suspicious_stew": "Seltsame Suppe", "chorus_fruit": "Chorusfrucht",
+    "popped_chorus_fruit": "Geplatzte Chorusfrucht", "dried_kelp": "Getrockneter Seetang", "glow_berries": "Leuchtbeeren",
+    "glistering_melon_slice": "Glitzernde Melonenscheibe", "melon_seeds": "Melonenkerne", "pumpkin_seeds": "Kürbiskerne",
+    "torchflower_seeds": "Fackelliliensamen", "pitcher_pod": "Kannenpflanzenkapsel", "cocoa_beans": "Kakaobohnen",
+    "raw_iron": "Roheisen", "raw_gold": "Rohgold", "raw_copper": "Rohkupfer", "iron_nugget": "Eisenklumpen",
+    "gold_nugget": "Goldklumpen", "copper_nugget": "Kupferklumpen", "netherite_scrap": "Netheritplatten",
+    "echo_shard": "Echoscherbe", "prismarine_shard": "Prismarinscherbe", "prismarine_crystals": "Prismarinkristalle",
+    "blaze_powder": "Lohenstaub", "breeze_rod": "Böenrute", "magma_cream": "Magmacreme", "dragon_breath": "Drachenatem",
+    "ink_sac": "Tintenbeutel", "glow_ink_sac": "Leuchttintenbeutel", "honeycomb": "Honigwabe", "rabbit_foot": "Hasenpfote",
+    "rabbit_hide": "Kaninchenfell", "armadillo_scute": "Gürteltier-Hornschild", "turtle_scute": "Schildkröten-Hornschild",
+    "goat_horn": "Ziegenhorn", "disc_fragment_5": "Plattenbruchstück", "resin_brick": "Harzziegel",
+    "nether_brick": "Netherziegel (Einzelstück)", "brush": "Pinsel", "recovery_compass": "Bergungskompass",
+    "lodestone_compass": "Leitstein-Kompass", "filled_map": "Karte", "empty_map": "Leere Karte",
+    "firework_star": "Feuerwerksstern", "written_book": "Beschriebenes Buch", "knowledge_book": "Buch des Wissens",
+    "debug_stick": "Debug-Stab", "tipped_arrow": "Getränkter Pfeil", "splash_potion": "Wurftrank",
+    "lingering_potion": "Verweiltrank", "ominous_bottle": "Unheilvolle Flasche", "trial_key": "Prüfungsschlüssel",
+    "ominous_trial_key": "Unheilvoller Prüfungsschlüssel", "wolf_armor": "Wolfspanzer",
+    "warped_fungus_on_a_stick": "Wirrpilzrute", "powder_snow_bucket": "Pulverschneeeimer", "cod_bucket": "Kabeljaueimer",
+    "salmon_bucket": "Lachseimer", "pufferfish_bucket": "Kugelfischeimer", "tropical_fish_bucket": "Tropenfischeimer",
+    "tadpole_bucket": "Kaulquappeneimer", "furnace_minecart": "Ofenlore", "hopper_minecart": "Trichterlore",
+    "tnt_minecart": "TNT-Lore", "command_block_minecart": "Befehlsblocklore", "blue_egg": "Blaues Ei", "brown_egg": "Braunes Ei",
+    "glow_item_frame": "Leuchtrahmen", "bamboo_raft": "Bambusfloß", "bamboo_chest_raft": "Bambustruhenfloß",
+    "bundle": "Bündel",
+}
+ITEM_CATEGORIES = {
+    "eggs": {"de": "Spawn-Eier", "en": "Spawn eggs"},
+    "music": {"de": "Schallplatten", "en": "Music discs"},
+    "patterns": {"de": "Farbstoffe, Scherben & Vorlagen", "en": "Dyes, sherds & templates"},
+}
+FOOD = re.compile(r"(^cooked_|beef|porkchop|chicken$|mutton|rabbit$|^cod$|^salmon$|tropical_fish$|pufferfish$|stew|soup|"
+                  r"apple|bread|carrot$|potato|melon_slice|berries|cookie|pie|chorus_fruit|dried_kelp|honey_bottle|"
+                  r"milk_bucket|rotten_flesh|spider_eye$|^beetroot$)")
+
+
+def item_german(name):
+    if name in ITEM_MANUAL: return ITEM_MANUAL[name]
+    if name in GEAR_SPECIAL: return GEAR_SPECIAL[name]
+    m = re.match(r"(.+)_spawn_egg$", name)
+    if m:
+        return MOBS[m.group(1)] + "-Spawn-Ei" if m.group(1) in MOBS else None
+    m = re.match(r"music_disc_(.+)$", name)
+    if m: return f"Schallplatte ({m.group(1).replace('_', ' ')})"
+    m = re.match(r"(.+)_pottery_sherd$", name)
+    if m: return f"Töpferscherbe ({m.group(1).replace('_', ' ')})"
+    m = re.match(r"(.+)_armor_trim_smithing_template$", name)
+    if m: return f"Schmiedevorlage ({m.group(1)})"
+    if name == "netherite_upgrade_smithing_template": return "Schmiedevorlage (Netheritaufwertung)"
+    m = re.match(r"(.+)_banner_pattern$", name)
+    if m: return f"Bannervorlage ({m.group(1).replace('_', ' ')})"
+    for mat, de in MATERIALS.items():
+        if name.startswith(mat + "_"):
+            rest = name[len(mat) + 1:]
+            if rest in GEAR: return de + GEAR[rest]
+            if rest == "horse_armor" and mat in HORSE:
+                return HORSE[mat] + ("" if HORSE[mat].endswith("-") else " ") + "Pferderüstung"
+            if rest == "nautilus_armor": return de + "-Nautilusrüstung"
+    c, rest = color_of(name)
+    if c:
+        if rest == "dye": return f"{adj(c, 'm')} Farbstoff"
+        if rest == "bundle": return f"{adj(c, 'n')} Bündel"
+        if rest == "harness": return f"{adj(c, 'n')} Geschirr"
+    w = wood_of(name)
+    if w and WOODS[w][1]:
+        if name == w + "_boat": return WOODS[w][0] + "boot"
+        if name == w + "_chest_boat": return WOODS[w][0] + "truhenboot"
+        if name == w + "_sign": return WOODS[w][0] + "schild"
+    if name in ("bamboo_sign", "crimson_sign", "warped_sign"):
+        return WOODS[name.split("_")[0]][0] + "schild"
+    return german(name)          # z. B. comparator, repeater, sugar_cane
+
+
+def item_category(name):
+    if name.endswith("_spawn_egg"): return "eggs"
+    if name.startswith("music_disc") or name == "disc_fragment_5": return "music"
+    if re.search(r"(pottery_sherd|smithing_template|banner_pattern|_dye$)", name): return "patterns"
+    if re.search(r"(helmet|chestplate|leggings|boots|_armor$|elytra|harness|saddle)", name): return "armor"
+    if re.search(r"(sword|spear|^bow$|crossbow|arrow|trident|mace|shield|wind_charge|snowball)", name): return "weapons"
+    if re.search(r"(pickaxe|_axe$|shovel|_hoe$|shears|fishing_rod|flint_and_steel|bucket$|compass|clock|spyglass|brush)", name):
+        return "food" if name == "milk_bucket" else "tools"
+    if FOOD.search(name): return "food"
+    if re.search(r"(boat|raft|minecart|map|book|potion|bottle|bundle|firework|lead|name_tag|key|sign$|frame$|painting|"
+                 r"armor_stand|ender_|end_crystal|totem|on_a_stick|comparator|repeater)", name): return "useful"
+    if re.search(r"(seeds|pod$|cocoa|sugar_cane|egg$)", name): return "nature"
+    return "materials"
+
+
 def main():
     root, jv, bv = Path(sys.argv[1]), sys.argv[2], sys.argv[3]
     load = lambda p: json.loads((root / "data" / p).read_text())
@@ -384,10 +516,27 @@ def main():
 
     catalog = json.loads(CATALOG.read_text())
     old_entries = catalog["entries"]
-    items_only = [e for e in old_entries if (e[4] if len(e) > 4 else "i") == "i"]
+    old_items = {e[0]: e for e in old_entries if (e[4] if len(e) > 4 else "i") == "i"}
+    jin = {i["name"]: i["displayName"] for i in load(f"pc/{jv}/items.json")}
+    bin_ = {i["name"]: i["displayName"] for i in load(f"bedrock/{bv}/items.json")}
     old_cat = {e[0]: e[3] for e in old_entries if len(e) > 4 and "b" in e[4]}
 
-    item_ids = {e[0] for e in items_only}
+    iskip = lambda n: any(re.search(p, n) for p in ITEM_SKIP)
+    j_items = {n for n in jin if n not in jb and not iskip(n)}
+    b_items = {n for n in bin_ if n not in bb and not iskip(n)}
+    item_ids = j_items | b_items
+    items_only, istats = [], {"de": 0, "en": 0}
+    for name in sorted(item_ids):
+        en = jin.get(name) or bin_[name]
+        if name.startswith("music_disc_"):
+            en = f"Music Disc ({name[11:].replace('_', ' ')})"
+        old = old_items.get(name)
+        de = (old[1] if old and old[1] != old[2] else None) or item_german(name)
+        istats["de" if de else "en"] += 1
+        entry = [name, de or en, en, old[3] if old and old[3] in catalog["categories"] and old[3] not in ("building", "minerals", "tech", "special") else item_category(name)]
+        if name not in b_items: entry += ["i", "j"]
+        elif name not in j_items: entry += ["i", "b"]
+        items_only.append(entry)
     skip = lambda n: n not in KEEP and any(re.search(p, n) for p in SKIP)
     out, stats = [], {"de": 0, "en": 0}
 
@@ -395,8 +544,7 @@ def main():
         ref = ALIAS.get(name, name) if edition == "b" else name
         de = german(name) or german(ref)
         stats["de" if de else "en"] += 1
-        # Gibt es die ID schon als reines Item (z. B. cake, wheat), bleibt der Block ein reiner Block-Eintrag
-        entry = [name, de or en, en, category(ref, old_cat), "ib" if is_item and name not in item_ids else "b"]
+        entry = [name, de or en, en, category(ref, old_cat), "ib" if is_item else "b"]
         if edition:
             entry.append(edition)
         out.append(entry)
@@ -416,14 +564,7 @@ def main():
         else:
             add(name, bb[name], "b", name in bi)
 
-    # Reine Items, die es unter dieser ID nur in einer Edition gibt, kennzeichnen
-    for e in items_only:
-        del e[4:]
-        if e[0] not in bi and e[0] not in bb:
-            e.extend(["i", "j"])
-        elif e[0] not in ji:
-            e.extend(["i", "b"])
-
+    catalog["categories"].update(ITEM_CATEGORIES)
     for key, val in CATEGORIES.items():
         catalog["categories"][key] = val
     catalog["entries"] = items_only + out
@@ -434,7 +575,7 @@ def main():
     text = json.dumps(head, ensure_ascii=False, indent=2)[:-2] + ',\n  "entries": [\n' + lines + "\n  ]\n}\n"
     CATALOG.write_text(text)
     print(f"{len(out)} Blöcke geschrieben ({stats['de']} mit deutschem Namen, {stats['en']} mit englischem), "
-          f"{len(items_only)} reine Items behalten.")
+          f"{len(items_only)} reine Items ({istats['de']} deutsch, {istats['en']} englisch).")
 
 
 if __name__ == "__main__":
