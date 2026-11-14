@@ -70,13 +70,17 @@ for (const file of site.commandFiles) {
 }
 
 const catalog = read('catalog.json');
-const seen = { i: new Set(), b: new Set() };
+const seen = {};
 for (const en of catalog.entries) {
-  const [cid, de, enName, cat, kind = 'i'] = en;
+  const [cid, de, enName, cat, kind = 'i', edition = ''] = en;
+  if (!['', 'j', 'b'].includes(edition)) err('catalog.' + cid, 'Edition muss j, b oder leer sein');
   if (!/^[a-z0-9_]+$/.test(cid || '') || !de || !enName) err('catalog.' + cid, 'unvollständig');
   if (!catalog.categories[cat]) err('catalog.' + cid, `unbekannte Kategorie "${cat}"`);
   if (!['i', 'b', 'ib'].includes(kind)) err('catalog.' + cid, 'Art muss i, b oder ib sein');
-  for (const k of kind) { if (seen[k]?.has(cid)) err('catalog.' + cid, 'doppelt'); seen[k]?.add(cid); }
+  for (const k of kind) for (const ed of edition ? [edition] : ['j', 'b']) {
+    const key = k + ed + ':' + cid;
+    if (seen[key]) err('catalog.' + cid, 'doppelt'); seen[key] = true;
+  }
 }
 
 const sel = read('selectors.json');

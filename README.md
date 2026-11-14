@@ -23,6 +23,7 @@ Kein offizielles Minecraft-Produkt. Nicht von Mojang oder Microsoft genehmigt od
 | `site/data/site.json` | Angaben fürs Impressum, Datenstand, Liste der Command-Dateien |
 | `site/js/` | App-Logik (reines JavaScript, kein Build-Schritt) |
 | `scripts/validate.mjs` | prüft die Daten, läuft auch bei jedem Push |
+| `tools/build_catalog.py` | erzeugt den Item- und Block-Katalog aus PrismarineJS/minecraft-data |
 | `tools/make_assets.py` | erzeugt die eigene Pixel-Schrift und die Pixel-Grafiken |
 | `CLAUDE.md` | Pflegeanleitung: Datenformat und Arbeitsweise |
 
