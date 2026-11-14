@@ -387,12 +387,12 @@ function fieldHtml(tk, i) {
 function catalogEntries(kind) {
   const want = kind === 'block' ? 'b' : 'i';
   return data.catalog.entries
-    .filter((en) => (en[4] || 'i').includes(want))
-    .map(([id, de, en, cat]) => ({ id, cat, label: prefs.lang === 'de' ? de : en, hay: (id + ' ' + de + ' ' + en).toLowerCase() }))
-    .sort((a, b) => a.label.localeCompare(b.label, prefs.lang));
+    .filter((en) => (en[4] || 'i').includes(want) && (!en[5] || en[5] === builder.edition[0]))
+    .map(([id, de, en, cat]) => ({ id, cat, label: prefs.lang === 'de' ? de : en, hay: (id.replace(/_/g, ' ') + ' ' + de + ' ' + en).toLowerCase() }))
+    .sort((a, b) => a.label.localeCompare(b.label, prefs.lang, { numeric: true }));
 }
 function pickerOptions(tk, kind, cat, q, current) {
-  const words = q.trim().toLowerCase().split(/\s+/).filter(Boolean);
+  const words = q.trim().toLowerCase().split(/[\s_]+/).filter(Boolean);
   const list = catalogEntries(kind).filter((en) => (cat === 'all' || en.cat === cat) && words.every((w) => en.hay.includes(w)));
   const first = tk.req ? `<option value="">${esc(t('pickOne')(list.length))}</option>` : `<option value="">${esc(t('none'))}</option>`;
   return first + list.map((en) => `<option value="${esc(en.id)}" ${en.id === current ? 'selected' : ''}>${esc(en.label + ' – ' + en.id)}</option>`).join('')

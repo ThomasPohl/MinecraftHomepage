@@ -8,7 +8,8 @@ hochgeladen (Push auf `main`). Nichts einführen, was einen Build oder externe D
 - **Daten und Code trennen.** Inhalte gehören nach `site/data/`, nicht in `site/js/`.
 - **Urheberrecht.** Beschreibungen immer selbst formulieren, nie aus dem Minecraft-Wiki, von
   Microsoft Learn oder anderen Seiten übernehmen. Keine Mojang-Grafiken, -Texturen, -Schriften
-  oder -Logos. Grafiken und Schrift kommen nur aus `tools/make_assets.py`.
+  oder -Logos. Grafiken und Schrift kommen nur aus `tools/make_assets.py`. Ausnahme für Fakten: Block-IDs und englische Blocknamen stammen aus den
+  offenen Registry-Daten von PrismarineJS/minecraft-data (siehe Katalog).
 - **Keine externen Anfragen** (keine CDNs, Google Fonts, Analytics). Der Datenschutztext sagt das zu.
 - **Zweisprachig.** Jeder Text braucht `de` und `en`. Oberflächen-Texte stehen in `site/js/i18n.js`.
 - Der Hinweis „Kein offizielles Minecraft-Produkt …“ im Fuß muss bleiben; der Seitentitel darf
@@ -70,8 +71,16 @@ sich teils zwischen Java und Bedrock (z. B. `villager` / `villager_v2`).
 Parameter vom Typ `item` und `block` zeigen eine Auswahl mit Kategorie-Filter, Suche und
 deutschen/englischen Namen sowie ein freies Feld für eigene IDs. Eintrag:
 `[id, deutscher Name, englischer Name, Kategorie, Art]`; Art `i` = nur Item (Standard), `b` = nur
-Block, `ib` = beides. Deutsche Namen wie im Spiel schreiben. Der Katalog ist eine Auswahl
-häufiger Items, keine vollständige Liste.
+Block, `ib` = beides. Ein optionales sechstes Feld nennt die Edition (`j` = nur Java, `b` = nur
+Bedrock), weil manche IDs sich unterscheiden (Java `light`, Bedrock `light_block_15`).
+Deutsche Namen wie im Spiel schreiben.
+
+- **Blöcke** (Art `b`/`ib`) werden vollständig erzeugt, nicht von Hand gepflegt:
+  `python3 -I tools/build_block_catalog.py <minecraft-data> <java-version> <bedrock-version>`
+  mit einem Checkout von github.com/PrismarineJS/minecraft-data (liefert nur IDs und englische
+  Namen). Deutsche Namen, Kategorien, ausgeschlossene technische Blöcke und Bedrock-Aliasse
+  stehen als Regeln und Tabellen im Skript; Korrekturen dort eintragen und neu erzeugen.
+- **Reine Items** (Art `i`) sind eine handgepflegte Auswahl häufiger Items; das Skript lässt sie stehen.
 
 ## Ziel-Auswahlen (`site/data/selectors.json`)
 
