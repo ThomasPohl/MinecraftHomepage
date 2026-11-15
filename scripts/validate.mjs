@@ -83,6 +83,24 @@ for (const en of catalog.entries) {
   }
 }
 
+const obtain = read('obtain.json');
+const blockIds = new Set(catalog.entries.filter((en) => (en[4] || 'i').includes('b')).map((en) => en[0]));
+const LEVELS = ['cmd', 'nosurvival', 'normal'];
+let obtainCount = 0;
+for (const [bid, o] of Object.entries(obtain.blocks || {})) {
+  obtainCount++;
+  if (!blockIds.has(bid)) err('obtain.' + bid, 'kein Block mit dieser ID im Katalog');
+  if (o.a !== undefined) {
+    const vals = typeof o.a === 'object' ? Object.entries(o.a) : [['', o.a]];
+    for (const [ed, v] of vals) {
+      if (ed && !['java', 'bedrock'].includes(ed)) err('obtain.' + bid, `unbekannte Edition "${ed}"`);
+      if (!LEVELS.includes(v)) err('obtain.' + bid, `a muss cmd, nosurvival oder normal sein, nicht "${v}"`);
+    }
+  }
+  if (o.use !== undefined && !['give', 'setblock'].includes(o.use)) err('obtain.' + bid, 'use muss give oder setblock sein');
+  if (!!o.de !== !!o.en) err('obtain.' + bid, 'Hinweis braucht de und en');
+}
+
 const sel = read('selectors.json');
 for (const x of sel.selectors) {
   if (!/^@[a-z]$/.test(x.id) || !x.de || !x.en || !x.editions?.length || typeof x.player !== 'boolean') err('selectors.' + x.id, 'unvollständig');
@@ -96,4 +114,4 @@ if (errors.length) {
   console.error(`${errors.length} Fehler:\n- ` + errors.join('\n- '));
   process.exit(1);
 }
-console.log(`OK: ${count} Commands (${java} Java, ${bedrock} Bedrock), ${Object.keys(lists).length - 1} Listen.`);
+console.log(`OK: ${count} Commands (${java} Java, ${bedrock} Bedrock), ${Object.keys(lists).length - 1} Listen, ${blockIds.size} Blöcke (${obtainCount} mit Angabe zur Erhältlichkeit).`);

@@ -83,6 +83,25 @@ Deutsche Namen wie im Spiel schreiben.
 - Bei reinen Items (Art `i`) behält das Skript deutsche Namen, die schon im Katalog stehen; einzelne
   Namen kann man also auch direkt in `catalog.json` korrigieren.
 
+## Blöcke-Seite und Erhältlichkeit (`site/data/obtain.json`)
+
+Die Seite `#/bloecke` listet alle Katalog-Einträge, die ein Block sind (Art `b` oder `ib`), mit
+Filtern für Suche, Edition, Kategorie und „Erhältlich“. `obtain.json` wird **von Hand** gepflegt
+(nicht vom Katalog-Skript erzeugt); Schlüssel ist die Block-ID:
+
+```json
+"barrier": { "a": "cmd", "de": "Kurzer Hinweis.", "en": "Short note." },
+"end_portal": { "a": "nosurvival", "use": "setblock" }
+```
+
+- `a`: `cmd` = nur per Command (nicht im normalen Kreativinventar; Java-Operator-Tab zählt nicht),
+  `nosurvival` = im Überleben weder herstellbar noch einsammelbar; fehlt `a`, gilt der Block als normal.
+  Unterscheidet es sich je Edition: `{ "java": "cmd", "bedrock": "nosurvival" }`.
+- `use: "setblock"`: Es gibt kein Item, die Seite zeigt `/setblock ~ ~ ~ id` statt `/give @s id`.
+- `de`/`en`: optionaler, selbst formulierter Hinweis (immer beide).
+- Nach einem Update neue technische Blöcke hier eintragen. Die Einstufung ist eine sorgfältige
+  Auswahl, aber nicht für jede Version im Spiel gegengeprüft.
+
 ## Ziel-Auswahlen (`site/data/selectors.json`)
 
 Parameter vom Typ `target` und `player` zeigen ein Dropdown mit erklärten Selektoren (`@s`, `@p` …)
