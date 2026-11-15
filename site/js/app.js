@@ -20,7 +20,7 @@ function savePrefs() {
 }
 
 const view = { q: '', cat: 'all', perm: 'all', favOnly: false, sort: { key: 'name', dir: 1 } };
-let data = { commands: [], lists: {}, site: {}, selectors: { selectors: [], filters: {} }, catalog: { categories: {}, entries: [] } };
+let data = { commands: [], lists: {}, site: {}, selectors: { selectors: [], filters: {} }, catalog: { categories: {}, entries: [] }, obtain: { blocks: {} } };
 const app = document.getElementById('app');
 const t = (key) => T[prefs.lang][key];
 
@@ -87,6 +87,10 @@ function applyChrome() {
   const tt = document.getElementById('theme-toggle');
   tt.textContent = theme === 'dark' ? '☀ ' + t('themeLight') : '☾ ' + t('themeDark');
   document.querySelectorAll('[data-lang]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === prefs.lang)));
+  const tabs = document.getElementById('tabs');
+  tabs.setAttribute('aria-label', t('tabsLabel'));
+  tabs.querySelector('[data-tab="cmds"]').textContent = t('tabCmds');
+  tabs.querySelector('[data-tab="blocks"]').textContent = t('tabBlocks');
   document.getElementById('foot-home').textContent = t('home');
   document.getElementById('foot-imprint').textContent = t('imprint');
   document.getElementById('foot-privacy').textContent = t('privacy');
@@ -251,7 +255,7 @@ app.addEventListener('click', (ev) => {
   if (fed) {
     prefs.filterEdition = fed.dataset.fed;
     if (fed.dataset.fed !== 'all') prefs.edition = fed.dataset.fed;   // letzte Auswahl merken
-    savePrefs(); updateRows(); return;
+    savePrefs(); updateRows(); updateBlockRows(); return;
   }
   if (el.closest('#f-fav')) {
     view.favOnly = !view.favOnly;
@@ -488,6 +492,169 @@ function updateOutput(ev) {
   document.getElementById('b-warn').hidden = !out.missing;
 }
 
+// ---------- Blöcke ----------
+const bview = { q: '', cat: 'all', obtain: 'all', sort: { key: 'name', dir: 1 } };
+const OBTAIN_FILTERS = ['all', 'normal', 'notnormal', 'nosurvival', 'cmd'];
+const OBTAIN_RANK = { normal: 0, nosurvival: 1, cmd: 2 };
+let blocks = [];   // aus dem Katalog: alle Einträge, die ein Block sind
+
+function buildBlocks() {
+  blocks = data.catalog.entries
+    .filter((en) => (en[4] || 'i').includes('b'))
+    .map(([id, de, en, cat, kind, ed = '']) => ({ id, de, en, cat, kind, ed, info: data.obtain.blocks[id] || {} }));
+}
+function blockEditions(b) { return b.ed ? [b.ed === 'j' ? 'java' : 'bedrock'] : EDITIONS; }
+function blockEdition(b) {
+  if (b.ed) return b.ed === 'j' ? 'java' : 'bedrock';
+  return prefs.filterEdition !== 'all' ? prefs.filterEdition : prefs.edition;
+}
+function obtainOf(b) {
+  const a = b.info.a;
+  return (a && typeof a === 'object' ? a[blockEdition(b)] : a) || 'normal';
+}
+function blockLabel(b) { return prefs.lang === 'de' ? b.de : b.en; }
+function blockCommand(b) {
+  return b.info.use === 'setblock' || !b.kind.includes('i') ? `/setblock ~ ~ ~ ${b.id}` : `/give @s ${b.id}`;
+}
+function obtainMatches(level, filter) {
+  if (filter === 'all') return true;
+  if (filter === 'notnormal') return level !== 'normal';
+  return level === filter;
+}
+function blockMatchesBase(b) {   // alle Filter außer „Erhältlich“
+  const fe = prefs.filterEdition;
+  if (fe !== 'all' && b.ed && b.ed !== fe[0]) return false;
+  if (bview.cat !== 'all' && b.cat !== bview.cat) return false;
+  const words = bview.q.trim().toLowerCase().split(/[\s_]+/).filter(Boolean);
+  if (!words.length) return true;
+  const hay = (b.id.replace(/_/g, ' ') + ' ' + b.id + ' ' + b.de + ' ' + b.en + ' ' + (b.info.de || '') + ' ' + (b.info.en || '')).toLowerCase();
+  return words.every((w) => hay.includes(w));
+}
+function blockSortValue(b, key) {
+  switch (key) {
+    case 'id': return b.id;
+    case 'cat': return data.catalog.categories[b.cat][prefs.lang];
+    case 'obtain': return OBTAIN_RANK[obtainOf(b)];
+    case 'edition': return b.ed === 'j' ? 0 : b.ed ? 2 : 1;
+    default: return blockLabel(b);
+  }
+}
+function sortedBlocks(list) {
+  const { key, dir } = bview.sort;
+  return [...list].sort((a, b) => {
+    const va = blockSortValue(a, key), vb = blockSortValue(b, key);
+    const d = typeof va === 'number' ? (va - vb) * dir : String(va).localeCompare(String(vb), prefs.lang, { numeric: true }) * dir;
+    return d || blockLabel(a).localeCompare(blockLabel(b), prefs.lang, { numeric: true }) || a.id.localeCompare(b.id);
+  });
+}
+
+const BLOCK_SORT = [['name', 'colBlock'], ['id', 'colId'], ['cat', 'category'], ['obtain', 'obtain'], ['edition', 'edition']];
+
+function renderBlocks() {
+  document.title = `${t('blocksTitle')} – ${t('title')}`;
+  const cats = Object.keys(data.catalog.categories).filter((c) => blocks.some((b) => b.cat === c));
+  const th = (key, label, cls) => `<th scope="col" class="${cls}" data-bsort="${key}"><button type="button">${esc(t(label))}<span class="arrow" aria-hidden="true">↕</span></button></th>`;
+  const levels = ['cmd', 'nosurvival', 'normal'];
+  app.innerHTML = `
+    <section class="panel">
+      <h1>${esc(t('blocksTitle'))}</h1>
+      <p class="prose">${esc(t('blocksIntro'))}</p>
+      <div class="controls blocks-controls">
+        <div class="c-search"><label for="k-q">${esc(t('search'))}</label>
+          <input type="search" id="k-q" placeholder="${esc(t('blockSearchPh'))}" value="${esc(bview.q)}" autocomplete="off"></div>
+        <div class="c-edition"><label id="lbl-ked">${esc(t('edition'))}</label>
+          <div class="seg" role="group" aria-labelledby="lbl-ked">
+            ${['all', 'java', 'bedrock'].map((e) => `<button type="button" class="btn" data-fed="${e}" aria-pressed="${prefs.filterEdition === e}">${e === 'all' ? esc(t('all')) : ED_LABEL[e]}</button>`).join('')}
+          </div></div>
+        <div><label for="k-cat">${esc(t('category'))}</label>
+          <select id="k-cat"><option value="all">${esc(t('allCats'))}</option>
+            ${cats.map((c) => `<option value="${c}" ${bview.cat === c ? 'selected' : ''}>${esc(data.catalog.categories[c][prefs.lang])}</option>`).join('')}</select></div>
+        <div class="c-obtain"><label for="k-obtain">${esc(t('obtain'))}</label>
+          <select id="k-obtain"></select></div>
+        <div class="mobile-sort"><label for="k-sort">${esc(t('sortBy'))}</label>
+          <select id="k-sort">${BLOCK_SORT.map(([k, l]) => `<option value="${k}" ${bview.sort.key === k ? 'selected' : ''}>${esc(t(l))}</option>`).join('')}</select></div>
+      </div>
+      <details class="help legend" ${matchMedia('(min-width: 901px)').matches ? 'open' : ''}><summary>${esc(t('obtainLegend'))}</summary>
+        <ul>${levels.map((l) => `<li><button type="button" class="badge-btn" data-obtain="${l}"><span class="badge ob-${l}">${esc(t('obtainBadge')[l])}</span></button> ${esc(t('obtainHelp')[l])}</li>`).join('')}</ul>
+      </details>
+      <p class="count" id="k-count" aria-live="polite"></p>
+    </section>
+    <section class="panel table-wrap">
+      <table class="cmds blocks">
+        <thead><tr>
+          ${th('edition', 'edition', 'c-ed')}${th('name', 'colBlock', 'c-name')}${th('id', 'colId', 'c-id')}${th('cat', 'category', 'c-cat')}${th('obtain', 'obtain', 'c-obtain')}
+          <th scope="col" class="c-ex">${esc(t('colGet'))}</th>
+        </tr></thead>
+        <tbody id="k-rows"></tbody>
+      </table>
+      <div id="k-empty" class="empty" hidden><p>${esc(t('noBlocks'))}</p><button type="button" class="btn" id="k-reset">${esc(t('resetFilters'))}</button></div>
+    </section>`;
+  updateBlockRows();
+}
+
+function blockRowHtml(b) {
+  const level = obtainOf(b), label = blockLabel(b), other = prefs.lang === 'de' ? b.en : b.de;
+  const note = b.info[prefs.lang], cmd = blockCommand(b);
+  return `<tr>
+    <td class="c-ed">${blockEditions(b).map((x) => `<span class="badge ${x}">${ED_LABEL[x]}</span>`).join('')}</td>
+    <td class="c-name"><strong>${esc(label)}</strong>${other && other !== label ? `<span class="alias">${esc(other)}</span>` : ''}${note ? `<span class="note">${esc(note)}</span>` : ''}</td>
+    <td class="c-id mono" data-label="${esc(t('colId'))}">${esc(b.id)}</td>
+    <td class="c-cat" data-label="${esc(t('category'))}">${esc(data.catalog.categories[b.cat][prefs.lang])}</td>
+    <td class="c-obtain" data-label="${esc(t('obtain'))}"><span class="badge ob-${level}">${esc(t('obtainBadge')[level])}</span></td>
+    <td class="c-ex" data-label="${esc(t('colGet'))}">${esc(cmd)}<button type="button" class="copy" data-copy="${esc(cmd)}">${esc(t('copy'))}</button>${cmd.startsWith('/setblock') ? `<span class="note">${esc(t('setblockHint'))}</span>` : ''}</td>
+  </tr>`;
+}
+
+function updateBlockRows() {
+  const rows = document.getElementById('k-rows');
+  if (!rows) return;
+  const base = blocks.filter(blockMatchesBase);
+  const levels = base.map(obtainOf);
+  const sel = document.getElementById('k-obtain');
+  sel.innerHTML = OBTAIN_FILTERS.map((f) => {
+    const n = f === 'all' ? base.length : levels.filter((l) => obtainMatches(l, f)).length;
+    return `<option value="${f}" ${bview.obtain === f ? 'selected' : ''}>${esc(t('obtainFilter')[f])} (${n})</option>`;
+  }).join('');
+  const list = sortedBlocks(base.filter((b, i) => obtainMatches(levels[i], bview.obtain)));
+  rows.innerHTML = list.map(blockRowHtml).join('');
+  document.getElementById('k-count').textContent = t('blockCount')(list.length, blocks.length);
+  document.getElementById('k-empty').hidden = list.length > 0;
+  document.querySelector('table.blocks').hidden = list.length === 0;
+  document.querySelectorAll('th[data-bsort]').forEach((thEl) => {
+    const active = thEl.dataset.bsort === bview.sort.key;
+    if (active) thEl.setAttribute('aria-sort', bview.sort.dir === 1 ? 'ascending' : 'descending');
+    else thEl.removeAttribute('aria-sort');
+    thEl.querySelector('.arrow').textContent = active ? (bview.sort.dir === 1 ? '▲' : '▼') : '↕';
+  });
+  document.querySelectorAll('[data-fed]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.fed === prefs.filterEdition)));
+  document.querySelectorAll('[data-obtain]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.obtain === bview.obtain)));
+}
+
+app.addEventListener('input', (ev) => {
+  if (ev.target.id === 'k-q') { bview.q = ev.target.value; updateBlockRows(); }
+});
+app.addEventListener('change', (ev) => {
+  const id = ev.target.id;
+  if (id === 'k-cat') { bview.cat = ev.target.value; updateBlockRows(); }
+  else if (id === 'k-obtain') { bview.obtain = ev.target.value; updateBlockRows(); }
+  else if (id === 'k-sort') { bview.sort = { key: ev.target.value, dir: 1 }; updateBlockRows(); }
+});
+app.addEventListener('click', (ev) => {
+  const el = ev.target;
+  const sortTh = el.closest('th[data-bsort]');
+  if (sortTh) {
+    const key = sortTh.dataset.bsort;
+    bview.sort = { key, dir: bview.sort.key === key ? -bview.sort.dir : 1 };
+    updateBlockRows(); return;
+  }
+  const ob = el.closest('[data-obtain]');
+  if (ob) { bview.obtain = bview.obtain === ob.dataset.obtain ? 'all' : ob.dataset.obtain; updateBlockRows(); return; }
+  if (el.closest('#k-reset')) {
+    Object.assign(bview, { q: '', cat: 'all', obtain: 'all' });
+    prefs.filterEdition = 'all'; savePrefs(); renderBlocks();
+  }
+});
+
 // ---------- Impressum / Datenschutz ----------
 function renderStatic(which) {
   const todo = (what) => `<span class="todo">[${esc(t('todo'))}: ${esc(what)}]</span>`;
@@ -500,7 +667,12 @@ function renderStatic(which) {
 // ---------- Router ----------
 function route() {
   const hash = location.hash.replace(/^#\/?/, '');
-  if (hash.startsWith('c/')) renderDetail(decodeURIComponent(hash.slice(2)));
+  const tab = hash === 'bloecke' ? 'blocks' : hash === '' || hash.startsWith('c/') ? 'cmds' : null;
+  document.querySelectorAll('#tabs [data-tab]').forEach((a) => {
+    if (a.dataset.tab === tab) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+  });
+  if (hash === 'bloecke') renderBlocks();
+  else if (hash.startsWith('c/')) renderDetail(decodeURIComponent(hash.slice(2)));
   else if (hash === 'impressum') renderStatic('imprint');
   else if (hash === 'datenschutz') renderStatic('privacy');
   else renderList();
@@ -515,9 +687,10 @@ async function load(path) {
 }
 (async function start() {
   try {
-    const [site, lists, selectors, catalog] = await Promise.all([load('data/site.json'), load('data/lists.json'), load('data/selectors.json'), load('data/catalog.json')]);
+    const [site, lists, selectors, catalog, obtain] = await Promise.all([load('data/site.json'), load('data/lists.json'), load('data/selectors.json'), load('data/catalog.json'), load('data/obtain.json')]);
     const files = await Promise.all(site.commandFiles.map((f) => load(`data/commands/${f}.json`)));
-    data = { site, lists, selectors, catalog, commands: files.flat() };
+    data = { site, lists, selectors, catalog, obtain, commands: files.flat() };
+    buildBlocks();
     prefs.favs = prefs.favs.filter((id) => data.commands.some((c) => c.id === id));
     applyChrome();
     route();

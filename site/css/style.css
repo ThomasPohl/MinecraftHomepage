@@ -98,6 +98,16 @@ code, .mono { font-family: var(--mono); font-size: 0.92em; }
 .head-tools { display: flex; gap: 10px; align-items: center; }
 .tagline { margin: 8px auto 0; color: var(--muted); }
 
+/* Reiter: Commands | Blöcke */
+.tabs { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+.tabs a {
+  font-family: var(--pixel); text-transform: uppercase; font-size: 14px; line-height: 1;
+  text-decoration: none; color: var(--ink); background: var(--panel);
+  border: 3px solid var(--line); box-shadow: 3px 3px 0 var(--shadow); padding: 11px 16px;
+}
+.tabs a:hover { background: var(--panel-2); color: var(--ink); }
+.tabs a[aria-current="page"] { background: var(--accent); color: var(--accent-ink); }
+
 .meadow {
   height: 48px;
   background: url("../img/flowers.svg") repeat-x left bottom / auto 48px;
@@ -175,6 +185,11 @@ input::placeholder { color: var(--muted); opacity: 0.8; }
   white-space: nowrap;
 }
 .badge.bedrock { background: var(--bedrock); }
+.badge.ob-normal { background: var(--muted); }
+.badge.ob-nosurvival { background: #8a5ac8; }
+.badge.ob-cmd { background: #c8323c; }
+[data-theme="dark"] .badge.ob-nosurvival { background: #c4a2f0; }
+[data-theme="dark"] .badge.ob-cmd { background: #ff8a8f; }
 [data-theme="dark"] .badge { color: #10200f; }
 
 .muted { color: var(--muted); }
@@ -229,6 +244,19 @@ table.cmds { width: 100%; border-collapse: collapse; font-size: 14.5px; }
 
 .empty { padding: 28px 16px; text-align: center; }
 
+/* ---------- Blöcke ---------- */
+.blocks-controls { grid-template-columns: minmax(200px, 2fr) auto minmax(150px, 1fr) minmax(230px, 1.4fr); margin-top: 14px; }
+.legend { margin-top: 14px; }
+.legend .badge { margin-right: 6px; }
+.badge-btn { all: unset; cursor: pointer; }
+.badge-btn:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.badge-btn[aria-pressed="true"] .badge { outline: 3px solid var(--ink); outline-offset: 1px; }
+.cmds.blocks tbody tr { cursor: default; }
+.cmds.blocks .c-name { min-width: 200px; }
+.cmds.blocks .c-id { font-size: 13px; overflow-wrap: anywhere; }
+.cmds.blocks .c-obtain { white-space: nowrap; }
+.cmds .note { display: block; font-size: 12.5px; color: var(--muted); margin-top: 2px; font-family: var(--sans); }
+
 /* ---------- Detailseite ---------- */
 .back { display: inline-block; margin-bottom: 16px; }
 .detail-head { display: flex; gap: 12px; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; }
@@ -275,6 +303,8 @@ ul.syntax li:first-child { border-top: 0; }
   .controls { grid-template-columns: 1fr 1fr; }
   .controls .c-search { grid-column: 1 / -1; }
   .controls .c-edition { grid-column: 1 / -1; }
+  .blocks-controls .c-obtain { grid-column: 1 / -1; }
+  .cmds.blocks .c-name strong { font-size: 17px; }
 
   .table-wrap { border: 0; box-shadow: none; background: none; overflow: visible; }
   .cmds thead { display: none; }
